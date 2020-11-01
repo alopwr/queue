@@ -8,8 +8,7 @@ django = "*"
 django-heroku = "*"
 gunicorn = "*"
 django-hcaptcha = "*"
-environ = "*"
-django-environ = "*"
+python-decouple = "*"
 
 [dev-packages]
 
