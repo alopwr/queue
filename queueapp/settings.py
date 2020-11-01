@@ -111,4 +111,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = "/static/"
+
+MS_TEAMS_SCOPES = "openid profile offline_access user.read"
+MS_TEAMS_APP_ID = "6b5b2ac1-4d64-4f78-a0a7-c12b223cba2f"
+MS_TEAMS_TENANT_ID = "327aa26f-46bc-41f9-aaef-74b5ceff014b"
+MS_TEAMS_APP_SECRET = config("MS_TEAMS_APP_SECRET")
+
 django_heroku.settings(locals())

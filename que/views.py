@@ -1,3 +1,47 @@
-from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
+from django.views.generic import DetailView
 
-# Create your views here.
+from .auth_helper import get_sign_in_url, get_token_from_code, get_user
+from .models import AuthorizedTeamsUser
+
+
+def sign_in(request):
+    sign_in_url, state = get_sign_in_url(request)
+    # Save the expected state so we can validate in the callback
+    request.session['auth_state'] = state
+    # Redirect to the Azure sign-in page
+    return HttpResponseRedirect(sign_in_url)
+
+
+def logout(request):
+    request.session.flush()
+    return redirect('queue')
+
+
+def callback(request):
+    # Get the state saved in session
+    expected_state = request.session.pop('auth_state', '')
+    # Make the token request
+    token = get_token_from_code(request, expected_state)
+    # Get the user's profile
+    user = get_user(token)
+    AuthorizedTeamsUser.objects.update_or_create(id=user['id'], defaults={'display_name': user['displayName'],
+                                                                          'principal_name': user['userPrincipalName'],
+                                                                          'title': user['jobTitle'],
+                                                                          'token': token,
+                                                                          })
+    request.session['userId'] = user['id']
+    request.session["userPrincipalName"] = user['userPrincipalName']
+    return redirect('queue')
+
+
+class QueueView(DetailView):
+    template_name = "que/queue.html"
+
+    def get_object(self, queryset=None):
+        try:
+            return AuthorizedTeamsUser.objects.get(id=self.request.session["userId"],
+                                                   principal_name=self.request.session["userPrincipalName"])
+        except:
+            return None

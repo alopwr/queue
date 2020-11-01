@@ -9,6 +9,8 @@ django-heroku = "*"
 gunicorn = "*"
 django-hcaptcha = "*"
 python-decouple = "*"
+requests-oauthlib = "*"
+jsonfield = "*"
 
 [dev-packages]
 
