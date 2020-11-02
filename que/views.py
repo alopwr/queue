@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.views.generic import DetailView
 
+from que.decorators import is_teacher_required
 from .auth_helper import get_sign_in_url, get_token_from_code, get_user
 from .models import AuthorizedTeamsUser, QueueTicket
 
@@ -34,6 +35,20 @@ def callback(request):
                                                                           })
     request.session['userId'] = user['id']
     request.session["userPrincipalName"] = user['userPrincipalName']
+    return redirect('que')
+
+
+@is_teacher_required
+def next_view(request):
+    first = QueueTicket.objects.first()
+    if first is not None:
+        first.delete()
+    return redirect('que')
+
+
+@is_teacher_required
+def clear_view(request):
+    QueueTicket.objects.all().delete()
     return redirect('que')
 
 

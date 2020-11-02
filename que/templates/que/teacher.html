@@ -32,14 +32,46 @@
 
                 {% else %}
                     <li class="list-group-item">{{ ticket.user.display_name }}</li>
+
                 {% endif %}
             {% endfor %}
         </ul>
         <div class="row">
-            <button type="button" class="btn btn-outline-danger" style="width: 48%; margin-right: auto">Wyczyść kolejkę</button>
-            <button type="button" class="btn btn-primary" style="width: 48%; margin-left: auto"><i class="fas fa-forward" style="margin-right: 10px"></i>  Następny uczeń</button>
+            <button type="button" class="btn btn-outline-danger {% if queue|length == 0 %}disabled{% endif %}"
+                    {% if queue|length > 0 %}data-toggle="modal" data-target="#exampleModal" {% endif %}
+                    style="width: 48%; margin-right: auto">Wyczyść kolejkę
+            </button>
+            <a href="{% url 'next' %}" type="button"
+               class="btn btn-primary {% if queue|length == 0 %}disabled{% endif %}"
+               style="width: 48%; margin-left: auto">
+                <i class="fas fa-forward" style="margin-right: 10px"></i> Następny uczeń
+            </a>
         </div>
 
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Wyczyść kolejkę</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Czy usunąć wszystkich oczekujących błagalników z kolejki?
+                        Decyzja jest nieodwracalna i potencjalnie niebezpieczna.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Jeszcze nie
+                        </button>
+                        <a href="{% url 'clear' %}" type="button" class="btn btn-danger">Wyczyść wszystkich</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="https://kit.fontawesome.com/6cfdb01cc0.js" crossorigin="anonymous"></script>
 {% endblock %}
