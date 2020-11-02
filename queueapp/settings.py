@@ -30,7 +30,7 @@ DEBUG = config("DEBUG", cast=bool, default=False)
 
 ALLOWED_HOSTS = [
     "aloqueue.herokuapp.com",
-    "queueapp.skica.dev",
+    "queue.skica.dev",
     "queueapp.kowalinski.dev",
 ]
 
