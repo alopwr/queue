@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn quewalcz.wsgi --log-file -
+web: gunicorn queueapp.wsgi --log-file -
