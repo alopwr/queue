@@ -37,3 +37,20 @@ class QueueTicket(models.Model):
 
     def __str__(self):
         return self.user.display_name + " since " + str(self.in_queue_since)
+
+
+class PastMeeting(models.Model):
+    teacher = models.ForeignKey(
+        AuthorizedTeamsUser, on_delete=models.CASCADE, related_name="teacher"
+    )
+    student = models.ForeignKey(
+        AuthorizedTeamsUser, on_delete=models.CASCADE, related_name="student"
+    )
+    started_at = models.DateTimeField(auto_now_add=True)
+    finished_at = models.DateTimeField()
+
+    @property
+    def duration(self):
+        if not self.finished_at:
+            return 0
+        return self.finished_at - self.started_at

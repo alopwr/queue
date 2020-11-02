@@ -5,7 +5,8 @@ from django.views.generic import DetailView
 
 from que.decorators import is_teacher_required
 from .auth_helper import get_sign_in_url, get_token_from_code, get_user
-from .models import AuthorizedTeamsUser, QueueTicket, PrincipalName
+from .models import AuthorizedTeamsUser, QueueTicket, PrincipalName, PastMeeting
+from django.utils import timezone
 
 
 def sign_in(request):
@@ -44,10 +45,28 @@ def callback(request):
 
 @is_teacher_required
 def next_view(request):
-    first = QueueTicket.objects.first()
-    if first is not None:
-        first.delete()
+    finished_ticket = QueueTicket.objects.first()
+    if finished_ticket is not None:
+        finished_meeting = PastMeeting.objects.update(
+            teacher=AuthorizedTeamsUser.objects.get(
+                principal_name=request.session["userPrincipalName"]
+            ),
+            student=finished_ticket.user,
+            finished_at=timezone.now(),
+        )
+        finished_ticket.delete()
+    person_now_starting_meeting = QueueTicket.objects.first().user
+    create_past_meeting(request, person_now_starting_meeting)
     return redirect("que")
+
+
+def create_past_meeting(request, student):
+    PastMeeting.objects.create(
+        teacher=AuthorizedTeamsUser.objects.get(
+            principal_name=request.session["userPrincipalName"]
+        ),
+        student=student,
+    )
 
 
 @is_teacher_required
@@ -81,6 +100,8 @@ class QueueView(DetailView):
             context["queue_length"] = max(QueueTicket.objects.count() - 1, 0)
         elif context["object"].is_teacher:
             context["queue"] = QueueTicket.objects.all()
+            # creating a meeting for the 1st person in the queue
+            create_past_meeting(self.request, QueueTicket.objects.first())
         else:
             pass
         return context

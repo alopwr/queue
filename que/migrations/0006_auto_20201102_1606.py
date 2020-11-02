@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('que', '0005_principalname'),
+        ("que", "0005_principalname"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='queueticket',
-            name='in_queue_since',
+            model_name="queueticket",
+            name="in_queue_since",
             field=models.DateTimeField(auto_now_add=True),
         ),
     ]

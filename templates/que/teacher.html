@@ -17,26 +17,31 @@
             color: #0c5460;
             position: absolute;
         }
+
+        .green {
+            color: green;
+        }
+
     </style>
 {% endblock %}
 {% block content %}
     <div class="jumbotron container">
         <h1 class="display-5">Lista błagalników:</h1>
-        <h6>Na audiencje oczekuje {{ queue|true_length }} uczniów</h6>
+        <h6>Na audiencję oczekuje jeszcze {{ queue|true_length }} uczniów</h6>
         <ul class="list-group">
             {% for ticket in queue|get3 %}
                 {% if forloop.first %}
                     <li class="list-group-item list-group-item-info d-flex justify-content-between align-items-center">
-                        <i class="far fa-hand-point-right fa-lg flying-bullet"> </i>
+                        <i class="far fa-hand-point-right fa-lg flying-bullet"></i>
                         <a href="callto:{{ ticket.user.principal_name }}">{{ ticket.user.display_name }}</a>
                         <a href="{% chat_deep_link object ticket.user %}"
-                           target="_blank" style="margin-left: 50px"><i class="far fa-comment-dots fa-lg"></i></a>
+                           target="_blank" style="margin-left: 50px"><i class="far fa-comment-dots fa-lg green"></i></a>
                     </li>
                 {% else %}
-                    <li class="list-group-item  d-flex justify-content-between align-items-center"">
-                    {{ ticket.user.display_name }}
-                    <a href="{% chat_deep_link object ticket.user %}"
-                       target="_blank" style="margin-left: 50px"><i class="far fa-comment-dots fa-lg"></i></a></li>
+                    <li class="list-group-item  d-flex justify-content-between align-items-center">
+                        {{ ticket.user.display_name }}
+                        <a href="{% chat_deep_link object ticket.user %}"
+                           target="_blank" style="margin-left: 50px"><i class="far fa-comment-dots fa-lg"></i></a></li>
                 {% endif %}
             {% endfor %}
             {% if queue|length > 4 %}
@@ -46,7 +51,7 @@
         <div class="row">
             <button type="button" class="btn btn-outline-danger {% if queue|length == 0 %}disabled{% endif %}"
                     {% if queue|length > 0 %}data-toggle="modal" data-target="#exampleModal" {% endif %}
-                    style="width: 48%; margin-right: auto">Wyczyść kolejkę
+                    style="width: 48%; margin-right: auto">Zresetuj kolejkę
             </button>
             <a href="{% url 'next' %}" type="button"
                class="btn btn-primary {% if queue|length == 0 %}disabled{% endif %}"
@@ -62,7 +67,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Wyczyść kolejkę</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Zresetuj kolejkę</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -74,7 +79,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Jeszcze nie
                         </button>
-                        <a href="{% url 'clear' %}" type="button" class="btn btn-danger">Wyczyść wszystkich</a>
+                        <a href="{% url 'clear' %}" type="button" class="btn btn-danger">Zresetuj wszystkich</a>
                     </div>
                 </div>
             </div>
