@@ -24,7 +24,7 @@
         <h1 class="display-5">Lista błagalników:</h1>
         <h6>Na audiencje oczekuje {{ queue|length }} uczniów</h6>
         <ul class="list-group">
-            {% for ticket in queue|slice:":4" %}
+            {% for ticket in queue|get3 %}
                 {% if forloop.first %}
                     <li class="list-group-item list-group-item-info">
                         <i class="far fa-hand-point-right fa-lg flying-bullet"> </i>
@@ -36,7 +36,7 @@
                 {% endif %}
             {% endfor %}
             {% if queue|length > 4 %}
-                <li class="list-group-item">... i <b>{{ queue|sub4 }}</b> więcej</li>
+                <li class="list-group-item">... i <b>{{ queue|sub3 }}</b> więcej</li>
             {% endif %}
         </ul>
         <div class="row">

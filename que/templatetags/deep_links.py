@@ -10,5 +10,12 @@ def chat_deep_link(teacher, student):
 
 
 @register.filter()
-def sub4(queue):
-    return len(queue) - 4
+def sub3(queue):
+    return len(queue) - 3
+
+
+@register.filter()
+def get3(queue):
+    if len(queue) == 4:
+        return queue
+    return queue[:3]
