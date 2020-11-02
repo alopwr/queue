@@ -43,8 +43,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "que.apps.QueConfig",
+    "bootstrap4",
     "hcaptcha",
+    "que.apps.QueConfig",
 ]
 
 MIDDLEWARE = [

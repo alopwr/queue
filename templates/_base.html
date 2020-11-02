@@ -1,0 +1,102 @@
+{% load static %}
+{% load bootstrap4 %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+{#    <!-- Global site tag (gtag.js) - Google Analytics -->#}
+{#    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-176793729-1"></script>#}
+{#    <script>#}
+{#        window.dataLayer = window.dataLayer || [];#}
+{##}
+{#        function gtag() {#}
+{#            dataLayer.push(arguments);#}
+{#        }#}
+{##}
+{#        gtag('js', new Date());#}
+{##}
+{#        gtag('config', 'UA-176793729-1');#}
+{#    </script>#}
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+    <title>Kolejka | {% block title %}{% endblock title %}</title>
+    <meta name="description"
+          content="Kolejka">
+    <meta name="author" content="Maksymilian Skica, Szymon Kowaliński">
+    {#    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">#}
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👪</text></svg>">
+    {% block css %}
+    {% endblock %}
+        <!-- Bootstrap CSS -->
+        {% bootstrap_css %}
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+
+<body>
+<div class="footer-container">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="TODO">👪👪 Kolejka</a>
+            <button class="navbar-toggler navbar-toggler-left" type="button" data-toggle="collapse"
+                    data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="text-light">☰</span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+{#                <ul class="navbar-nav ml-auto">#}
+{#                    {% last_repo_cookie as last_repo_cookie %}#}
+{#                    {% url "repo-detail" last_repo_cookie|lower as repo_url %}#}
+{#                    {% if request.path != repo_url %}#}
+{#                        <li class="nav-item">#}
+{#                            {% last_repo_cookie as last_repo_cookie %}#}
+{#                            {% if last_repo_cookie %}#}
+{#                                <a class='navbar-link'#}
+{#                                   href={% url "repo-detail" last_repo_cookie|lower %}>{{ last_repo_cookie }}</a>#}
+{#                            {% else %}#}
+{#                                <a class='navbar-link' href={% url "recreate-repo" %}>#}
+{#                                    Stwórz repo#}
+{#                                </a>#}
+{#                            {% endif %}#}
+{##}
+{#                        </li>#}
+{#                    {% else %}#}
+{#                        <a class='navbar-link' href={% url "recreate-repo" %}>#}
+{#                            Stwórz nowe repo#}
+{#                        </a>#}
+{#                    {% endif %}#}
+{#                </ul>#}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container page">
+        {% block content %}
+            <p>Default content...</p>
+        {% endblock content %}
+    </div>
+
+    <footer class="bg-dark footer ">
+        <div class="container">
+            {#            <p class="text-white">#}
+            <a class="m-0 text-white"
+               href="https://skica.dev" target="_blank">Maksymilian Skica️,</a>
+            <a class="m-0 text-white"
+               href="https://kowalinski.dev" target="_blank">Szymon Kowaliński️</a>
+            {#            </p>#}
+        </div>
+    </footer>
+</div>
+</div>
+{% block javascript %}
+    <!-- Bootstrap JavaScript -->
+    {% bootstrap_javascript jquery='full' %}
+
+    <!-- Project JS -->
+    <script src="{% static 'js/base.js' %}"></script>
+
+{% endblock javascript %}
+
+</body>
+</html>
