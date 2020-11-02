@@ -3,6 +3,10 @@ from django.conf import settings
 from django.db import models
 
 
+class PrincipalName(models.Model):
+    name = models.EmailField()
+
+
 class AuthorizedTeamsUser(models.Model):
     id = models.CharField(primary_key=True, max_length=100)
     principal_name = models.CharField(max_length=100)
@@ -12,7 +16,11 @@ class AuthorizedTeamsUser(models.Model):
 
     @property
     def is_teacher(self):
-        return self.principal_name in settings.TEACHERS_PRINCIPAL_NAMES
+        try:
+            PrincipalName.objects.get(name=self.principal_name)
+            return True
+        except:
+            return False
 
 
 class QueueTicket(models.Model):
