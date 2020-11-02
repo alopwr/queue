@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.views.generic import DetailView
@@ -16,7 +17,7 @@ def sign_in(request):
 
 def logout(request):
     request.session.flush()
-    return redirect('queue')
+    return redirect('que')
 
 
 def callback(request):
@@ -33,11 +34,17 @@ def callback(request):
                                                                           })
     request.session['userId'] = user['id']
     request.session["userPrincipalName"] = user['userPrincipalName']
-    return redirect('queue')
+    return redirect('que')
 
 
 class QueueView(DetailView):
-    template_name = "que/queue.html"
+    def get_template_names(self):
+        if self.request.session.get('userPrincipalName', None) is None:
+            return ['que/anonym.html']
+        elif self.request.session['userPrincipalName'] in settings.TEACHERS_PRINCIPAL_NAMES:
+            return ['que/teacher.html']
+        else:
+            return ['que/students.html']
 
     def get_object(self, queryset=None):
         try:
@@ -45,3 +52,13 @@ class QueueView(DetailView):
                                                    principal_name=self.request.session["userPrincipalName"])
         except:
             return None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if context['object'] is None:
+            pass
+        elif context['object'].is_teacher:
+            pass
+        else:
+            pass
+        return context

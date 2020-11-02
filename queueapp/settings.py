@@ -117,4 +117,5 @@ MS_TEAMS_APP_ID = "6b5b2ac1-4d64-4f78-a0a7-c12b223cba2f"
 MS_TEAMS_TENANT_ID = "327aa26f-46bc-41f9-aaef-74b5ceff014b"
 MS_TEAMS_APP_SECRET = config("MS_TEAMS_APP_SECRET")
 
+TEACHERS_PRINCIPAL_NAMES = ["maciej.walczynski@zsa.pwr.edu.pl", "szymon.kowalinski.2019@zsa.pwr.edu.pl"]
 django_heroku.settings(locals())
