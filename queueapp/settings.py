@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 
 import django_heroku
+import os.path
 from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -111,6 +112,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = "/static/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 MS_TEAMS_SCOPES = "openid profile offline_access user.read"
 MS_TEAMS_APP_ID = "6b5b2ac1-4d64-4f78-a0a7-c12b223cba2f"

@@ -1,4 +1,45 @@
 {% extends 'que/core.html' %}
+{% block css %}
+    <style>
+        .list-group {
+            max-width: 80%;
+            margin: 30px auto;
+        }
+
+        .row {
+            max-width: 80%;
+            margin: 30px auto;
+        }
+
+        .flying-bullet {
+            margin-left: -50px;
+            color: #0c5460;
+            position: absolute;
+        }
+    </style>
+{% endblock %}
 {% block content %}
-    teacher
+    <div class="jumbotron container">
+        <h1 class="display-5">Lista błagalników:</h1>
+        <h6>Na audiencje oczekuje {{ queue|length }} uczniów</h6>
+        <ul class="list-group">
+            {% for ticket in queue %}
+                {% if forloop.first %}
+                    <li class="list-group-item list-group-item-info">
+                        <i class="far fa-hand-point-right fa-lg flying-bullet"> </i>
+                        {{ ticket.user.display_name }}
+                    </li>
+
+                {% else %}
+                    <li class="list-group-item">{{ ticket.user.display_name }}</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <div class="row">
+            <button type="button" class="btn btn-outline-danger" style="width: 48%; margin-right: auto">Wyczyść kolejkę</button>
+            <button type="button" class="btn btn-primary" style="width: 48%; margin-left: auto"><i class="fas fa-forward" style="margin-right: 10px"></i>  Następny uczeń</button>
+        </div>
+
+    </div>
+    <script src="https://kit.fontawesome.com/6cfdb01cc0.js" crossorigin="anonymous"></script>
 {% endblock %}

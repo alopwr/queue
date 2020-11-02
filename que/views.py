@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from django.views.generic import DetailView
 
 from .auth_helper import get_sign_in_url, get_token_from_code, get_user
-from .models import AuthorizedTeamsUser
+from .models import AuthorizedTeamsUser, QueueTicket
 
 
 def sign_in(request):
@@ -56,9 +56,9 @@ class QueueView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if context['object'] is None:
-            pass
+            context['queue_length'] = QueueTicket.objects.count()
         elif context['object'].is_teacher:
-            pass
+            context['queue'] = QueueTicket.objects.all()
         else:
             pass
         return context
