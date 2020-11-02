@@ -71,7 +71,7 @@ class QueueView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if context['object'] is None:
-            context['queue_length'] = QueueTicket.objects.count()
+            context['queue_length'] = max(QueueTicket.objects.count() - 1, 0)
         elif context['object'].is_teacher:
             context['queue'] = QueueTicket.objects.all()
         else:

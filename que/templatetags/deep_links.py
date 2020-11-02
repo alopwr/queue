@@ -19,3 +19,8 @@ def get3(queue):
     if len(queue) == 4:
         return queue
     return queue[:3]
+
+
+@register.filter()
+def true_length(queue):
+    return max(len(queue) - 1, 0)

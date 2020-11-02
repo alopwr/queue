@@ -22,7 +22,7 @@
 {% block content %}
     <div class="jumbotron container">
         <h1 class="display-5">Lista błagalników:</h1>
-        <h6>Na audiencje oczekuje {{ queue|length }} uczniów</h6>
+        <h6>Na audiencje oczekuje {{ queue|true_length }} uczniów</h6>
         <ul class="list-group">
             {% for ticket in queue|get3 %}
                 {% if forloop.first %}
