@@ -2,9 +2,6 @@ a.navbar-link {
     color: white;
 }
 
-.nobull {
-    list-style-type: none;
-}
 
 h2 {
     margin-bottom: 25px;
@@ -26,8 +23,4 @@ h2 {
     height: 80px; /* Set the fixed height of the footer here */
     line-height: 80px; /* Vertically center the text there */
     background-color: #f5f5f5;
-}
-.badge{
-    font-size: 100%;
-    margin: 2px;
 }
