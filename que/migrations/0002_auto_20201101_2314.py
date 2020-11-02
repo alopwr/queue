@@ -7,21 +7,25 @@ import jsonfield.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('que', '0001_initial'),
+        ("que", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AuthorizedTeamsUser',
+            name="AuthorizedTeamsUser",
             fields=[
-                ('id', models.CharField(max_length=100, primary_key=True, serialize=False)),
-                ('principal_name', models.CharField(max_length=100)),
-                ('display_name', models.CharField(blank=True, max_length=100, null=True)),
-                ('title', models.CharField(blank=True, max_length=100, null=True)),
-                ('token', jsonfield.fields.JSONField(blank=True, null=True)),
+                (
+                    "id",
+                    models.CharField(max_length=100, primary_key=True, serialize=False),
+                ),
+                ("principal_name", models.CharField(max_length=100)),
+                (
+                    "display_name",
+                    models.CharField(blank=True, max_length=100, null=True),
+                ),
+                ("title", models.CharField(blank=True, max_length=100, null=True)),
+                ("token", jsonfield.fields.JSONField(blank=True, null=True)),
             ],
         ),
-        migrations.DeleteModel(
-            name='Person',
-        ),
+        migrations.DeleteModel(name="Person",),
     ]

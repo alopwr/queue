@@ -20,4 +20,4 @@ class QueueTicket(models.Model):
     in_queue_since = models.DateField(auto_now_add=True)
 
     class Meta:
-        ordering = ['in_queue_since']
+        ordering = ["in_queue_since"]

@@ -6,12 +6,11 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('que', '0003_auto_20201102_0919'),
+        ("que", "0003_auto_20201102_0919"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='queueticket',
-            options={'ordering': ['in_queue_since']},
+            name="queueticket", options={"ordering": ["in_queue_since"]},
         ),
     ]

@@ -28,7 +28,11 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", cast=bool, default=False)
 
-ALLOWED_HOSTS = ["aloqueue.herokuapp.com", "queueapp.skica.dev", "queueapp.kowalinski.dev"]
+ALLOWED_HOSTS = [
+    "aloqueue.herokuapp.com",
+    "queueapp.skica.dev",
+    "queueapp.kowalinski.dev",
+]
 
 # Application definition
 
@@ -90,9 +94,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", },
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator", },
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator", },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
 ]
 
 # Internationalization
@@ -119,5 +123,9 @@ MS_TEAMS_APP_ID = "6b5b2ac1-4d64-4f78-a0a7-c12b223cba2f"
 MS_TEAMS_TENANT_ID = "327aa26f-46bc-41f9-aaef-74b5ceff014b"
 MS_TEAMS_APP_SECRET = config("MS_TEAMS_APP_SECRET")
 
-TEACHERS_PRINCIPAL_NAMES = ["maciej.walczynski@zsa.pwr.edu.pl", "szymon.kowalinski.2019@zsa.pwr.edu.pl"]
+TEACHERS_PRINCIPAL_NAMES = [
+    "maciej.walczynski@zsa.pwr.edu.pl",
+    "szymon.kowalinski.2019@zsa.pwr.edu.pl",
+    "maksymilian.skica.2019@zsa.pwr.edu.pl",
+]
 django_heroku.settings(locals())
