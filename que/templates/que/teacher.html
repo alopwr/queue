@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load deep_links %}
 {% block css %}
     <style>
         .list-group {
@@ -23,18 +24,20 @@
         <h1 class="display-5">Lista błagalników:</h1>
         <h6>Na audiencje oczekuje {{ queue|length }} uczniów</h6>
         <ul class="list-group">
-            {% for ticket in queue %}
+            {% for ticket in queue|slice:":4" %}
                 {% if forloop.first %}
                     <li class="list-group-item list-group-item-info">
                         <i class="far fa-hand-point-right fa-lg flying-bullet"> </i>
-                        {{ ticket.user.display_name }}
+                        <a href="{% chat_deep_link object ticket.user %}"
+                           target="_blank">{{ ticket.user.display_name }}</a>
                     </li>
-
                 {% else %}
                     <li class="list-group-item">{{ ticket.user.display_name }}</li>
-
                 {% endif %}
             {% endfor %}
+            {% if queue|length > 4 %}
+                <li class="list-group-item">... i <b>{{ queue|sub4 }}</b> więcej</li>
+            {% endif %}
         </ul>
         <div class="row">
             <button type="button" class="btn btn-outline-danger {% if queue|length == 0 %}disabled{% endif %}"
