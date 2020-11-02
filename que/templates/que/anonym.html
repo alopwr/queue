@@ -1,4 +1,4 @@
-{% extends 'que/core.html' %}
+{% extends '_base.html' %}
 {% load static %}
 {% block css %}
     <style>
@@ -20,9 +20,9 @@
         <hr class="my-4">
         <p>Aktualnie kolejka ma {{ queue_length }} błagalników</p>
         <br/>
-            <a href="{% url 'login' %}" role="button" class="btn login"  style="margin: 0 5%; transform: translate(-5%, 0);">
-                Login with Microsoft
-            </a>
+        <a href="{% url 'login' %}" role="button" class="btn login" style="margin: 0 5%; transform: translate(-5%, 0);">
+            Login with Microsoft
+        </a>
         {#        <div class="row"><a class="btn" href="{% url 'login' %}" role="button" style="margin:  40px auto"> <img#}
         {#                src="{% static 'img/login.svg' %}"#}
         {#                alt="Login with Microsoft"></a>#}
