@@ -5,7 +5,7 @@ from django.views.generic import DetailView
 
 from que.decorators import is_teacher_required
 from .auth_helper import get_sign_in_url, get_token_from_code, get_user
-from .models import AuthorizedTeamsUser, QueueTicket
+from .models import AuthorizedTeamsUser, QueueTicket, PrincipalName
 
 
 def sign_in(request):
@@ -60,12 +60,10 @@ class QueueView(DetailView):
     def get_template_names(self):
         if self.request.session.get("userPrincipalName", None) is None:
             return ["que/anonym.html"]
-        elif (
-            self.request.session["userPrincipalName"]
-            in settings.TEACHERS_PRINCIPAL_NAMES
-        ):
+        try:
+            PrincipalName.objects.get(name=self.request.session["userPrincipalName"])
             return ["que/teacher.html"]
-        else:
+        except:
             return ["que/students.html"]
 
     def get_object(self, queryset=None):
