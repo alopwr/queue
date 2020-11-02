@@ -11,6 +11,7 @@ django-hcaptcha = "*"
 python-decouple = "*"
 requests-oauthlib = "*"
 jsonfield = "*"
+django-bootstrap4 = "*"
 
 [dev-packages]
 

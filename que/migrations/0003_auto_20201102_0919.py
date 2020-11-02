@@ -7,19 +7,31 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('que', '0002_auto_20201101_2314'),
+        ("que", "0002_auto_20201101_2314"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='QueueTicket',
+            name="QueueTicket",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('in_queue_since', models.DateField(auto_now_add=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='que.authorizedteamsuser')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("in_queue_since", models.DateField(auto_now_add=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="que.authorizedteamsuser",
+                    ),
+                ),
             ],
         ),
-        migrations.DeleteModel(
-            name='Queue',
-        ),
+        migrations.DeleteModel(name="Queue",),
     ]

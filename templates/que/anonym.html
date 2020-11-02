@@ -15,14 +15,15 @@
 {% endblock %}
 {% block content %}
     <div class="container jumbotron">
-        <h1 class="display-4">System zarządzania audiencją u Pana Walczyńskiego</h1>
+        <h1>System zarządzania audiencją u Pana Walczyńskiego</h1>
         <p class="lead">Zautomatyzowane obsługiwanie błagalników</p>
         <hr class="my-4">
-        <p>Aktualnie kolejka liczy {{ queue_length }} oczekujących </p>
-        <br/>
+        <p>Aktualnie kolejka liczy <b>{{ queue_length }} oczekujących.</b></p>
+        <br>
+        <p>Aby stanąć w kolejce, zaloguj się kontem Microsoft Teams:
         <a href="{% url 'login' %}" role="button" class="btn login" style="margin: 0 5%; transform: translate(-5%, 0);">
             Login with Microsoft
-        </a>
+        </a></p>
         {#        <div class="row"><a class="btn" href="{% url 'login' %}" role="button" style="margin:  40px auto"> <img#}
         {#                src="{% static 'img/login.svg' %}"#}
         {#                alt="Login with Microsoft"></a>#}
