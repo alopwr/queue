@@ -26,13 +26,17 @@
         <ul class="list-group">
             {% for ticket in queue|get3 %}
                 {% if forloop.first %}
-                    <li class="list-group-item list-group-item-info">
+                    <li class="list-group-item list-group-item-info d-flex justify-content-between align-items-center">
                         <i class="far fa-hand-point-right fa-lg flying-bullet"> </i>
+                        <a href="callto:{{ ticket.user.principal_name }}">{{ ticket.user.display_name }}</a>
                         <a href="{% chat_deep_link object ticket.user %}"
-                           target="_blank">{{ ticket.user.display_name }}</a>
+                           target="_blank" style="margin-left: 50px"><i class="far fa-comment-dots fa-lg"></i></a>
                     </li>
                 {% else %}
-                    <li class="list-group-item">{{ ticket.user.display_name }}</li>
+                    <li class="list-group-item  d-flex justify-content-between align-items-center"">
+                    {{ ticket.user.display_name }}
+                    <a href="{% chat_deep_link object ticket.user %}"
+                       target="_blank" style="margin-left: 50px"><i class="far fa-comment-dots fa-lg"></i></a></li>
                 {% endif %}
             {% endfor %}
             {% if queue|length > 4 %}
