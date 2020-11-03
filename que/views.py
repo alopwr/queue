@@ -93,8 +93,9 @@ def average_meeting_time():
     durations = []
     for pm in PastMeeting.objects.all():
         if pm.duration:
-            durations.append(pm.duration)
-    average_duration = sum(durations) / len(durations)
+            durations.append(pm.duration.seconds)
+    average_duration = sum(durations) / len(durations) / 60
+    print(average_duration)
     return min(max(average_duration, 2), 6)
 
 
