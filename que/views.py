@@ -61,12 +61,13 @@ def next_view(request):
 
 
 def create_past_meeting(request, student):
-    PastMeeting.objects.create(
+    obj, _ = PastMeeting.objects.get_or_create(
         teacher=AuthorizedTeamsUser.objects.get(
             principal_name=request.session["userPrincipalName"]
         ),
         student=student,
     )
+    return obj
 
 
 @is_teacher_required
