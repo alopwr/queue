@@ -77,6 +77,15 @@ def clear_view(request):
     return redirect("que")
 
 
+def cancel_view(request):
+    student = AuthorizedTeamsUser.objects.get(
+        principal_name=request.session.get("userPrincipalName")
+    )
+    student_ticket = QueueTicket.objects.get(user=student)
+    student_ticket.delete()
+    return redirect("que")
+
+
 class QueueView(DetailView):
     def get_template_names(self):
         if self.request.session.get("userPrincipalName", None) is None:
