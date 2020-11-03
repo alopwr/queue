@@ -60,5 +60,5 @@ class PastMeeting(models.Model):
     @property
     def duration(self):
         if not self.finished_at:
-            return self.started_at - self.started_at
+            return None
         return self.finished_at - self.started_at
