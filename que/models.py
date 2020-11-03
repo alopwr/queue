@@ -29,7 +29,7 @@ class AuthorizedTeamsUser(models.Model):
 
 
 class QueueTicket(models.Model):
-    user = models.ForeignKey(AuthorizedTeamsUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(AuthorizedTeamsUser, on_delete=models.CASCADE, unique=True)
     in_queue_since = models.DateTimeField(auto_now=True)
 
     class Meta:
