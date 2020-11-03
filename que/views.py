@@ -100,12 +100,20 @@ class QueueView(DetailView):
         context = super().get_context_data(**kwargs)
         if context["object"] is None:
             context["queue_length"] = max(QueueTicket.objects.count() - 1, 0)
+            context["estimated_time"] = context["queue_length"] * 5
         elif context["object"].is_teacher:
             context["queue"] = QueueTicket.objects.all()
             # creating a meeting for the 1st person in the queue
             if len(context["queue"]) > 0:
-                context['startedAt'] = create_past_meeting(self.request,
-                                                           QueueTicket.objects.first().user).started_at.isoformat()
-        else:
-            pass
+                context['startedAt'] = create_past_meeting(self.request, QueueTicket.objects.first().user).started_at.isoformat()
+        else:  # user is a student
+            student = AuthorizedTeamsUser.objects.get(
+                principal_name=self.request.session.get("userPrincipalName")
+            )
+            try:
+                student_ticket = QueueTicket.objects.get(user=student)
+            except:
+                student_ticket = QueueTicket.objects.create(user=student)
+            context["queue_position"] = student_ticket.position_in_queue
+            context["estimated_time"] = student_ticket.position_in_queue * 5
         return context

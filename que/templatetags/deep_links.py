@@ -24,4 +24,4 @@ def get3(queue):
 
 @register.filter()
 def true_length(queue):
-    return max(len(queue) - 1, 0)
+    return max(len(queue), 0)

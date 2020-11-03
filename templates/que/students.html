@@ -1,14 +1,27 @@
 {% extends '_base.html' %}
+{% block title %}
+    {% if queue_position == 0 %}
+        POŁĄCZENIE!!!
+    {% else %}
+        Oczekiwanie...
+    {% endif %}
+{% endblock %}
 {% block meta %}
  <meta http-equiv="refresh" content="5">
 {% endblock %}
 {% block content %}
     <div class="container jumbotron">
-        <h1>Czekasz na połączenie od Pana Walczyńskiego</h1>
-        <p class="lead">Będzie warto!</p>
+    {% if queue_position == 0 %}
+                <h1>Twoja kolej!</h1>
+        <p class="lead">Odbierz połączenie na Teamsach.</p>
+        {% else %}
+        <h1>Jesteś <b>{{ queue_position }}.</b> w kolejce.</h1>
+        <p class="lead">Szacowany czas oczekiwania na połączenie
+            to <b>{{ estimated_time }}</b> minut.</p>
+        {% endif %}
         <hr class="my-4">
-        <p>Jesteś <b>{{ queue_position }}.</b> w kolejce. Szacowany czas oczekiwania na połączenie
-            to <b>{{ estimated_time }}</b>. Dane aktualizowane co 5 sekund.</p>
+        <p>Pan Walczyński zadzwoni do ciebie na Teamsach. Przygotuj swój kod i niezbędne materiały, aby rozmowa przebiegła jak najpłynniej.</p>
+        <p>Dane aktualizowane co 5 sekund.</p>
         <br>
         <a href="https://www.youtube.com/watch?v=DLzxrzFCyOs" target="_blank">Muzyka na czekanie</a>
         {#        <div class="row"><a class="btn" href="{% url 'login' %}" role="button" style="margin:  40px auto"> <img#}

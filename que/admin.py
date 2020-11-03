@@ -6,4 +6,10 @@ from .models import AuthorizedTeamsUser, QueueTicket, PrincipalName, PastMeeting
 admin.site.register(AuthorizedTeamsUser)
 admin.site.register(QueueTicket)
 admin.site.register(PrincipalName)
-admin.site.register(PastMeeting)
+
+
+class PastMeetingAdmin(admin.ModelAdmin):
+    readonly_fields = ("started_at",)
+
+
+admin.site.register(PastMeeting, PastMeetingAdmin)

@@ -30,13 +30,21 @@ class AuthorizedTeamsUser(models.Model):
 
 class QueueTicket(models.Model):
     user = models.ForeignKey(AuthorizedTeamsUser, on_delete=models.CASCADE)
-    in_queue_since = models.DateTimeField(auto_now_add=True)
+    in_queue_since = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["in_queue_since"]
 
     def __str__(self):
         return self.user.display_name + " since " + str(self.in_queue_since)
+
+    @property
+    def position_in_queue(self):
+        position = 0
+        for ticket in QueueTicket.objects.order_by():
+            if ticket == self:
+                return position
+            position += 1
 
 
 class PastMeeting(models.Model):
