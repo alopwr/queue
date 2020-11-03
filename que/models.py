@@ -30,7 +30,7 @@ class AuthorizedTeamsUser(models.Model):
 
 class QueueTicket(models.Model):
     user = models.ForeignKey(AuthorizedTeamsUser, on_delete=models.CASCADE)
-    in_queue_since = models.DateTimeField(auto_now_add=True)
+    in_queue_since = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["in_queue_since"]
