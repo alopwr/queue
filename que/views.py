@@ -90,11 +90,11 @@ def cancel_view(request):
 def average_meeting_time():
     if len(PastMeeting.objects.all()) == 0:
         return 3
-    average_duration = (
-        PastMeeting.objects.filter(finished_at__isnull=False)
-        .annotate(duration=F("finished_at") - F("started_at"))
-        .aggregate(Avg("duration"))
-    )
+    durations = []
+    for pm in PastMeeting.objects.all():
+        if pm.duration:
+            durations.append(pm.duration)
+    average_duration = sum(durations) / len(durations)
     return min(max(average_duration, 2), 6)
 
 
