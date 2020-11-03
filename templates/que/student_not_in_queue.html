@@ -1,0 +1,20 @@
+{% extends '_base.html' %}
+{% block title %}
+        Potwierdzenie
+{% endblock %}
+{% block content %}
+    <div class="container jumbotron">
+            <h1>Chcesz stanąć w kolejce?</h1>
+            <p class="lead">Zamawianie połączenia na Teamsach od Pana Walczyńskiego</p>
+                <hr class="my-4">
+            <a href="/?create=True" type="button" class="btn btn-success">Zamawiam rozmowę
+            </a>
+        <br>
+        <br>
+        <p>Jeśli <b>już zakończyłeś rozmowę</b>, możesz spokojnie zamknąć to okno.</p>
+        {#        <div class="row"><a class="btn" href="{% url 'login' %}" role="button" style="margin:  40px auto"> <img#}
+        {#                src="{% static 'img/login.svg' %}"#}
+        {#                alt="Login with Microsoft"></a>#}
+        {#        </div>#}
+    </div>
+{% endblock %}

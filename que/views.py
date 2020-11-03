@@ -83,7 +83,7 @@ def cancel_view(request):
     )
     student_ticket = QueueTicket.objects.get(user=student)
     student_ticket.delete()
-    return redirect("logout")
+    return redirect("que")
 
 
 def queue_view_dispatcher(request):
@@ -96,8 +96,15 @@ def queue_view_dispatcher(request):
         return AnonymQueueView.as_view()(request)
     if teams_user.is_teacher:
         return TeacherQueueView.as_view(teams_user=teams_user)(request)
-    else:
+    elif request.GET.get("create", False):
         return StudentQueueView.as_view(teams_user=teams_user)(request)
+    else:
+        try:
+            # when there is no parameter but user already has a ticket
+            QueueTicket.objects.get(user=teams_user)
+            return StudentQueueView.as_view(teams_user=teams_user)(request)
+        except:
+            return StudentNotInQueueView.as_view()(request)
 
 
 class AnonymQueueView(TemplateView):
@@ -126,6 +133,10 @@ class TeacherQueueView(ListView):
                 self.request, QueueTicket.objects.first().user
             ).started_at.isoformat()
         return context
+
+
+class StudentNotInQueueView(TemplateView):
+    template_name = "que/student_not_in_queue.html"
 
 
 class StudentQueueView(DetailView):
