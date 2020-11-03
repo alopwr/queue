@@ -38,6 +38,14 @@ class QueueTicket(models.Model):
     def __str__(self):
         return self.user.display_name + " since " + str(self.in_queue_since)
 
+    @property
+    def position_in_queue(self):
+        position = 0
+        for ticket in QueueTicket.objects.order_by():
+            if ticket == self:
+                return position
+            position += 1
+
 
 class PastMeeting(models.Model):
     teacher = models.ForeignKey(

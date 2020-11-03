@@ -113,6 +113,6 @@ class QueueView(DetailView):
                 student_ticket = QueueTicket.objects.get(user=student)
             except:
                 student_ticket = QueueTicket.objects.create(user=student)
-            # context["queue_position"]
+            context["queue_position"] = student_ticket.position_in_queue
             # context["estimated_time"]
         return context
