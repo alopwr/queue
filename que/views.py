@@ -86,6 +86,10 @@ def cancel_view(request):
     return redirect("logout")
 
 
+def average_meeting_time():
+    return 5
+
+
 class QueueView(DetailView):
     def get_template_names(self):
         if self.request.session.get("userPrincipalName", None) is None:
@@ -108,8 +112,8 @@ class QueueView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if context["object"] is None:
-            context["queue_length"] = max(QueueTicket.objects.count() - 1, 0)
-            context["estimated_time"] = (context["queue_length"] + 1) * 5
+            context["queue_length"] = max(QueueTicket.objects.count(), 0)
+            context["estimated_time"] = (context["queue_length"]) * average_meeting_time
         elif context["object"].is_teacher:
             context["queue"] = QueueTicket.objects.all()
             # creating a meeting for the 1st person in the queue
@@ -126,5 +130,7 @@ class QueueView(DetailView):
             except:
                 student_ticket = QueueTicket.objects.create(user=student)
             context["queue_position"] = student_ticket.position_in_queue
-            context["estimated_time"] = student_ticket.position_in_queue * 5
+            context["estimated_time"] = (
+                student_ticket.position_in_queue * average_meeting_time
+            )
         return context
