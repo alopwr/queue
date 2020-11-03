@@ -11,9 +11,14 @@
 {% endblock %}
 {% block content %}
     <div class="container jumbotron">
+    {% if queue_position == 0 %}
+                <h1>Twoja kolej!</h1>
+        <p class="lead">Odbierz połączenie na Teamsach.</p>
+        {% else %}
         <h1>Jesteś <b>{{ queue_position }}.</b> w kolejce.</h1>
         <p class="lead">Szacowany czas oczekiwania na połączenie
             to <b>{{ estimated_time }}</b> minut.</p>
+        {% endif %}
         <hr class="my-4">
         <p>Pan Walczyński zadzwoni do ciebie na Teamsach. Przygotuj swój kod i niezbędne materiały, aby rozmowa przebiegła jak najpłynniej.</p>
         <p>Dane aktualizowane co 5 sekund.</p>
