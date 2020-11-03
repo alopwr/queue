@@ -83,7 +83,7 @@ def cancel_view(request):
     )
     student_ticket = QueueTicket.objects.get(user=student)
     student_ticket.delete()
-    return redirect("que")
+    return redirect("logout")
 
 
 class QueueView(DetailView):
