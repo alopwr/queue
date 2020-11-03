@@ -114,7 +114,9 @@ class QueueView(DetailView):
             context["queue"] = QueueTicket.objects.all()
             # creating a meeting for the 1st person in the queue
             if len(context["queue"]) > 0:
-                context['startedAt'] = create_past_meeting(self.request, QueueTicket.objects.first().user).started_at.isoformat()
+                context["startedAt"] = create_past_meeting(
+                    self.request, QueueTicket.objects.first().user
+                ).started_at.isoformat()
         else:  # user is a student
             student = AuthorizedTeamsUser.objects.get(
                 principal_name=self.request.session.get("userPrincipalName")
