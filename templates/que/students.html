@@ -1,6 +1,10 @@
 {% extends '_base.html' %}
 {% block title %}
-Oczekiwanie...
+    {% if queue_position == 0 %}
+        POŁĄCZENIE!!!
+    {% else %}
+        Oczekiwanie...
+    {% endif %}
 {% endblock %}
 {% block meta %}
  <meta http-equiv="refresh" content="5">
