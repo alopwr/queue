@@ -61,7 +61,7 @@ def next_view(request):
 
 
 def create_past_meeting(request, student):
-    obj, _ = PastMeeting.objects.get_or_create(
+    obj, _ = PastMeeting.objects.filter(finished_at__isnull=True).get_or_create(
         teacher=AuthorizedTeamsUser.objects.get(
             principal_name=request.session["userPrincipalName"]
         ),
@@ -73,6 +73,7 @@ def create_past_meeting(request, student):
 @is_teacher_required
 def clear_view(request):
     QueueTicket.objects.all().delete()
+    PastMeeting.objects.filter(finished_at__isnull=True).delete()
     return redirect("que")
 
 
