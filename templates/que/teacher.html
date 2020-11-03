@@ -1,5 +1,6 @@
 {% extends '_base.html' %}
 {% load deep_links %}
+{% load static %}
 {% block css %}
     <style>
         .list-group {
@@ -25,7 +26,7 @@
     </style>
 {% endblock %}
 {% block meta %}
- <meta http-equiv="refresh" content="5">
+    <meta http-equiv="refresh" content="5">
 {% endblock %}
 {% block content %}
     <div class="jumbotron container">
@@ -36,7 +37,10 @@
                 {% if forloop.first %}
                     <li class="list-group-item list-group-item-info d-flex justify-content-between align-items-center">
                         <i class="far fa-hand-point-right fa-lg flying-bullet"></i>
-                        <a href="callto:{{ ticket.user.principal_name }}">{{ ticket.user.display_name }}</a>
+                        <span>
+                            <a href="callto:{{ ticket.user.principal_name }}">{{ ticket.user.display_name }}</a>
+                            <span id="timer"></span>
+                        </span>
                         <a href="{% chat_deep_link object ticket.user %}"
                            target="_blank" style="margin-left: 50px"><i class="far fa-comment-dots fa-lg green"></i></a>
                     </li>
@@ -88,5 +92,12 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block javascript %}
+    {{ block.super }}
     <script src="https://kit.fontawesome.com/6cfdb01cc0.js" crossorigin="anonymous"></script>
+    <script>
+        var startedAt = new Date("{{ startedAt }}");
+    </script>
+    <script src="{% static 'js/timer.js' %}"></script>
 {% endblock %}
