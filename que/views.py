@@ -6,7 +6,7 @@ from django.views.generic import DetailView
 from que.decorators import is_teacher_required
 from .auth_helper import get_sign_in_url, get_token_from_code, get_user
 from .models import AuthorizedTeamsUser, QueueTicket, PrincipalName, PastMeeting
-from django.db.models import Avg
+from django.db.models import Avg, F
 
 
 def sign_in(request):
@@ -90,7 +90,11 @@ def cancel_view(request):
 def average_meeting_time():
     if len(PastMeeting.objects.all()) == 0:
         return 3
-    average_duration = PastMeeting.objects.aggregate(Avg("duration"))
+    average_duration = (
+        PastMeeting.objects.filter(finished_at__isnull=False)
+        .annotate(duration=F("finished_at") - F("finished_at"))
+        .aggregate(Avg("time_diff"))
+    )
     return min(max(average_duration, 2), 6)
 
 
