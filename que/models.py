@@ -21,7 +21,7 @@ class AuthorizedTeamsUser(models.Model):
         try:
             PrincipalName.objects.get(name=self.principal_name)
             return True
-        except:
+        except PrincipalName.DoesNotExist:
             return False
 
     def __str__(self):
