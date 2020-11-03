@@ -1,12 +1,11 @@
-from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
+from django.utils import timezone
 from django.views.generic import DetailView
 
 from que.decorators import is_teacher_required
 from .auth_helper import get_sign_in_url, get_token_from_code, get_user
 from .models import AuthorizedTeamsUser, QueueTicket, PrincipalName, PastMeeting
-from django.utils import timezone
 
 
 def sign_in(request):
@@ -101,7 +100,8 @@ class QueueView(DetailView):
         elif context["object"].is_teacher:
             context["queue"] = QueueTicket.objects.all()
             # creating a meeting for the 1st person in the queue
-            create_past_meeting(self.request, QueueTicket.objects.first())
+            if len(context["queue"]) > 0:
+                create_past_meeting(self.request, QueueTicket.objects.first())
         else:
             pass
         return context

@@ -47,7 +47,7 @@ class PastMeeting(models.Model):
         AuthorizedTeamsUser, on_delete=models.CASCADE, related_name="student"
     )
     started_at = models.DateTimeField(auto_now_add=True)
-    finished_at = models.DateTimeField()
+    finished_at = models.DateTimeField(null=True, blank=True)
 
     @property
     def duration(self):
