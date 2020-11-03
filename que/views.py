@@ -54,8 +54,9 @@ def next_view(request):
             finished_at=timezone.now(),
         )
         finished_ticket.delete()
-    person_now_starting_meeting = QueueTicket.objects.first().user
-    create_past_meeting(request, person_now_starting_meeting)
+    now_starting_meeting = QueueTicket.objects.first()
+    if now_starting_meeting is not None:
+        create_past_meeting(request, now_starting_meeting.user)
     return redirect("que")
 
 
@@ -101,7 +102,7 @@ class QueueView(DetailView):
             context["queue"] = QueueTicket.objects.all()
             # creating a meeting for the 1st person in the queue
             if len(context["queue"]) > 0:
-                create_past_meeting(self.request, QueueTicket.objects.first())
+                create_past_meeting(self.request, QueueTicket.objects.first().user)
         else:
             pass
         return context
