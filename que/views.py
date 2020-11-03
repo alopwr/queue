@@ -5,7 +5,7 @@ from django.views.generic import TemplateView, ListView, DetailView
 
 from que.decorators import is_teacher_required
 from .auth_helper import get_sign_in_url, get_token_from_code, get_user
-from .models import AuthorizedTeamsUser, QueueTicket, PastMeeting
+from .models import AuthorizedTeamsUser, QueueTicket, PastMeeting, average_meeting_time
 
 
 def sign_in(request):
@@ -86,18 +86,6 @@ def cancel_view(request):
     return redirect("logout")
 
 
-def average_meeting_time():
-    if len(PastMeeting.objects.all()) == 0:
-        return 3
-    durations = []
-    for pm in PastMeeting.objects.all():
-        if pm.duration:
-            durations.append(pm.duration.seconds)
-    average_duration = sum(durations) / len(durations) / 60
-    print(average_duration)
-    return min(max(average_duration, 2), 6)
-
-
 def queue_view_dispatcher(request):
     try:
         teams_user = AuthorizedTeamsUser.objects.get(
@@ -130,8 +118,10 @@ class TeacherQueueView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['object'] = self.teams_user
-        if len(context["queue"]) > 0:  # creating a meeting for the 1st person in the queue
+        context["object"] = self.teams_user
+        if (
+            len(context["queue"]) > 0
+        ):  # creating a meeting for the 1st person in the queue
             context["startedAt"] = create_past_meeting(
                 self.request, QueueTicket.objects.first().user
             ).started_at.isoformat()
@@ -149,8 +139,8 @@ class StudentQueueView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["queue_position"] = context['student_ticket'].position_in_queue
+        context["queue_position"] = context["student_ticket"].position_in_queue
         context["estimated_time"] = (
-                context['student_ticket'].position_in_queue * average_meeting_time()
+            context["student_ticket"].position_in_queue * average_meeting_time()
         )
         return context
