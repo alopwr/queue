@@ -93,7 +93,7 @@ def average_meeting_time():
     average_duration = (
         PastMeeting.objects.filter(finished_at__isnull=False)
         .annotate(duration=F("finished_at") - F("started_at"))
-        .aggregate(Avg("time_diff"))
+        .aggregate(Avg("duration"))
     )
     return min(max(average_duration, 2), 6)
 
