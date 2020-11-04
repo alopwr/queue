@@ -65,6 +65,8 @@ class PastMeeting(models.Model):
 
 
 def average_meeting_time():
+    if not PastMeeting.objects.exists():
+        return 6
     if len(PastMeeting.objects.all()) == 0:
         return 3
     durations = []
