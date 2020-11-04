@@ -31,7 +31,7 @@ DEBUG = config("DEBUG", cast=bool, default=False)
 ALLOWED_HOSTS = [
     "aloqueue.herokuapp.com",
     "queue.skica.dev",
-    "queueapp.kowalinski.dev",
+    "queue.kowalinski.dev",
 ]
 
 # Application definition
@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "bootstrap4",
-    "hcaptcha",
     "que.apps.QueConfig",
 ]
 
