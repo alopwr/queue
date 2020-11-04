@@ -3,7 +3,7 @@
     {% if queue_position == 0 %}
         POŁĄCZENIE!!!
     {% else %}
-        Oczekiwanie...
+        {{ queue_position }}. w kolejce
     {% endif %}
 {% endblock %}
 {% block meta %}
