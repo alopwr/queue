@@ -14,6 +14,7 @@ django-bootstrap4 = "*"
 uvicorn = "*"
 channels = "*"
 channels-redis = "*"
+uvloop = {version = "*", sys_platform = " != 'win32'"}
 
 [dev-packages]
 
