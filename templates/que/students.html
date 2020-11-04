@@ -6,9 +6,6 @@
         {{ queue_position }}. w kolejce
     {% endif %}
 {% endblock %}
-{% block meta %}
-    <meta http-equiv="refresh" content="5;URL='/'">
-{% endblock %}
 {% block content %}
     <div class="container jumbotron">
         {% if queue_position == 0 %}

@@ -11,6 +11,9 @@ python-decouple = "*"
 requests-oauthlib = "*"
 jsonfield = "*"
 django-bootstrap4 = "*"
+uvicorn = "*"
+channels = "*"
+channels-redis = "*"
 
 [dev-packages]
 
