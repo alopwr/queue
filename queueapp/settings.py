@@ -140,4 +140,10 @@ else:
             },
         },
     }
+
+MSG_TYPE_TICKET_APPEND = 'queue.ticket_appended'
+MSG_TYPE_TICKET_DELETE = 'queue.ticket_deleted'
+MSG_TYPE_TICKET_CLEAR = 'queue.cleared'
+MSG_TYPE_TICKET_NEXT = 'queue.next'
+
 django_heroku.settings(locals())
