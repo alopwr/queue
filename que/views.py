@@ -78,11 +78,7 @@ def clear_view(request):
 
 
 def cancel_view(request):
-    student = AuthorizedTeamsUser.objects.get(
-        principal_name=request.session.get("userPrincipalName")
-    )
-    student_ticket = QueueTicket.objects.get(user=student)
-    student_ticket.delete()
+    QueueTicket.objects.filter(user__principal_name=request.session.get("userPrincipalName")).delete()
     return redirect("que")
 
 
@@ -103,7 +99,7 @@ def queue_view_dispatcher(request):
             # when there is no parameter but user already has a ticket
             QueueTicket.objects.get(user=teams_user)
             return StudentQueueView.as_view(teams_user=teams_user)(request)
-        except:
+        except QueueTicket.DoesNotExist:
             return StudentNotInQueueView.as_view()(request)
 
 
@@ -127,7 +123,7 @@ class TeacherQueueView(ListView):
         context = super().get_context_data(**kwargs)
         context["object"] = self.teams_user
         if (
-            len(context["queue"]) > 0
+                len(context["queue"]) > 0
         ):  # creating a meeting for the 1st person in the queue
             context["startedAt"] = create_past_meeting(
                 self.request, QueueTicket.objects.first().user
@@ -152,6 +148,6 @@ class StudentQueueView(DetailView):
         context = super().get_context_data(**kwargs)
         context["queue_position"] = context["student_ticket"].position_in_queue
         context["estimated_time"] = (
-            context["student_ticket"].position_in_queue * average_meeting_time()
+                context["student_ticket"].position_in_queue * average_meeting_time()
         )
         return context
