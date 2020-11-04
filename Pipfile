@@ -6,15 +6,17 @@ name = "pypi"
 [packages]
 Django = "*"
 django-heroku = "*"
-gunicorn = "*"
 python-decouple = "*"
 requests-oauthlib = "*"
 jsonfield = "*"
 django-bootstrap4 = "*"
-uvicorn = "*"
 channels = "*"
 channels-redis = "*"
+
+gunicorn = "*"
+uvicorn = "*"
 uvloop = {version = "*", sys_platform = " != 'win32'"}
+httptools = "*"
 
 [dev-packages]
 
