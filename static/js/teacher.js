@@ -4,4 +4,5 @@ socket = new ReconnectingWebSocket(ws_scheme + '://' + window.location.host + "/
 socket.onmessage = function (message) {
     var data = JSON.parse(message.data);
     console.log(data);
+    window.location.reload();
 };
