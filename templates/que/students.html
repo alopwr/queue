@@ -15,7 +15,7 @@
             <h1>Twoja kolej!</h1>
             <p class="lead">Odbierz połączenie na Teamsach. Możesz zamknąć to okno. </p>
             <hr class="my-4">
-            <img src="https://i.pinimg.com/originals/7b/f8/70/7bf870a9b86ae6c6297b0eb6611a120d.gif">
+            <img class="img-fluid" src="https://i.pinimg.com/originals/7b/f8/70/7bf870a9b86ae6c6297b0eb6611a120d.gif" alt="puzon">
         {% else %}
             <h1>Jesteś <b>{{ queue_position }}.</b> w kolejce.</h1>
             <p class="lead">Szacowany czas oczekiwania na połączenie
@@ -26,7 +26,7 @@
             <p>Pan Walczyński zadzwoni do ciebie na Teamsach. Przygotuj swój kod i niezbędne materiały, aby rozmowa
                 przebiegła
                 jak najpłynniej.</p>
-            <img src="https://media0.giphy.com/media/QBd2kLB5qDmysEXre9/giphy.gif">
+            <img class="img-fluid" src="https://media0.giphy.com/media/QBd2kLB5qDmysEXre9/giphy.gif" alt="waiting">
             <p>Dane aktualizowane co 5 sekund.</p>
             <a href="{% url 'cancel' %}" type="button" class="btn btn-danger">Anuluj prośbę o połączenie
             </a>
