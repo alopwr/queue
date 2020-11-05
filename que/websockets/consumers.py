@@ -1,7 +1,7 @@
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
-from que.models import QueueTicket, average_meeting_time
+from ..models import QueueTicket, average_meeting_time
 
 
 class TeacherConsumer(AsyncJsonWebsocketConsumer):
