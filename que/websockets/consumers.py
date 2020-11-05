@@ -17,13 +17,7 @@ class TeacherConsumer(AsyncJsonWebsocketConsumer):
         )
 
     async def queue_ticket_deleted(self, event):
-        await self.send_json(
-            {
-                "msg_type": "queue.ticket_deleted",
-                "position": event["position"],
-                "principal_name": event["principal_name"],
-            },
-        )
+        await self.send_json({"msg_type": "queue.ticket_deleted"}, )
 
 
 class StudentConsumer(AsyncJsonWebsocketConsumer):
