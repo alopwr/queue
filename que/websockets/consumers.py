@@ -26,7 +26,6 @@ class StudentConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         self.userId = self.scope['url_route']['kwargs']['id']
-        await self.load_status()
         await self.accept()
 
     @database_sync_to_async
@@ -61,4 +60,5 @@ class StudentConsumer(AsyncJsonWebsocketConsumer):
 
     async def receive_json(self, content, **kwargs):
         if content['type'] == "get.update":
+            await self.load_status()
             await self.send_update()
