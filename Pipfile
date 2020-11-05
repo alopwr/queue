@@ -12,11 +12,8 @@ jsonfield = "*"
 django-bootstrap4 = "*"
 channels = "*"
 channels-redis = "*"
-
 gunicorn = "*"
-uvicorn = "*"
-uvloop = {version = "*", sys_platform = " != 'win32'"}
-httptools = "*"
+uvicorn = {extras = ["standard"], version = "*"}
 
 [dev-packages]
 
