@@ -65,13 +65,13 @@ class PastMeeting(models.Model):
 
 
 def average_meeting_time():
-    if not PastMeeting.objects.exists():
-        return 6
     if len(PastMeeting.objects.all()) == 0:
         return 3
     durations = []
     for pm in PastMeeting.objects.all():
         if pm.duration:
             durations.append(pm.duration.seconds)
+    if len(durations) <= 0:
+        return 6
     average_duration = sum(durations) / len(durations) / 60
     return min(max(average_duration, 2), 6)
