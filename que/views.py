@@ -32,6 +32,8 @@ def callback(request):
     token = get_token_from_code(request, expected_state)
     # Get the user's profile
     user = get_user(token)
+    if user["userPrincipalName"] == "gaspar.sekula.2019@zsa.pwr.edu.pl":
+        user['displayName'] += " 🤓"
     AuthorizedTeamsUser.objects.update_or_create(
         id=user["id"],
         defaults={
@@ -147,7 +149,7 @@ class TeacherQueueView(ListView):
         context = super().get_context_data(**kwargs)
         context["object"] = self.teams_user
         if (
-            len(context["queue"]) > 0
+                len(context["queue"]) > 0
         ):  # creating a meeting for the 1st person in the queue
             context["startedAt"] = create_past_meeting(
                 self.request, QueueTicket.objects.first().user
@@ -171,6 +173,6 @@ class StudentQueueView(DetailView):
         context = super().get_context_data(**kwargs)
         context["queue_position"] = context["student_ticket"].position_in_queue
         context["estimated_time"] = (
-            context["student_ticket"].position_in_queue * average_meeting_time()
+                context["student_ticket"].position_in_queue * average_meeting_time()
         )
         return context
