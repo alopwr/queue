@@ -1,8 +1,6 @@
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
-from ..models import QueueTicket, average_meeting_time
-
 
 class TeacherConsumer(AsyncJsonWebsocketConsumer):
     groups = ['teachers', "queue_listeners"]
@@ -33,6 +31,7 @@ class StudentConsumer(AsyncJsonWebsocketConsumer):
 
     @database_sync_to_async
     def load_status(self):
+        from ..models import QueueTicket, average_meeting_time
         ticket = QueueTicket.objects.get(user_id=self.userId)
         self.position = ticket.position_in_queue
         self.average_meeting_time = average_meeting_time()
