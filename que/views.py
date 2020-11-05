@@ -1,3 +1,5 @@
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils import timezone
@@ -6,6 +8,8 @@ from django.views.generic import TemplateView, ListView, DetailView
 from que.decorators import is_teacher_required
 from .auth_helper import get_sign_in_url, get_token_from_code, get_user
 from .models import AuthorizedTeamsUser, QueueTicket, PastMeeting, average_meeting_time
+
+channel_layer = get_channel_layer()
 
 
 def sign_in(request):
@@ -57,6 +61,7 @@ def next_view(request):
     now_starting_meeting = QueueTicket.objects.first()
     if now_starting_meeting is not None:
         create_past_meeting(request, now_starting_meeting.user)
+    async_to_sync(channel_layer.group_send)("students", {"type": "queue.next", "average": average_meeting_time(), })
     return redirect("que")
 
 
@@ -74,13 +79,33 @@ def create_past_meeting(request, student):
 def clear_view(request):
     QueueTicket.objects.all().delete()
     PastMeeting.objects.filter(finished_at__isnull=True).delete()
+    async_to_sync(channel_layer.group_send)("students", {"type": "queue.cleared", })
     return redirect("que")
 
 
 def cancel_view(request):
-    QueueTicket.objects.filter(
-        user__principal_name=request.session.get("userPrincipalName")
-    ).delete()
+    ticket = QueueTicket.objects.get(user__principal_name=request.session.get("userPrincipalName"))
+    principal_name = ticket.user.principal_name
+    position = ticket.position_in_queue
+    ticket.delete()
+    async_to_sync(channel_layer.group_send)("queue_listeners", {
+        "type": "queue.ticket_deleted",
+        "position": position,
+        "principal_name": principal_name,
+        "average": average_meeting_time(),
+    })
+    return redirect("que")
+
+
+def create_view(request):
+    obj, created = QueueTicket.objects.get_or_create(user_id=request.session['userId'])
+    if created:
+        async_to_sync(channel_layer.group_send)("teachers", {
+            "type": "queue.ticket_appended",
+            "display_name": obj.user.display_name,
+            "principal_name": obj.user.principal_name,
+            "average": average_meeting_time(),
+        })
     return redirect("que")
 
 
@@ -94,13 +119,10 @@ def queue_view_dispatcher(request):
         return AnonymQueueView.as_view()(request)
     if teams_user.is_teacher:
         return TeacherQueueView.as_view(teams_user=teams_user)(request)
-    elif request.GET.get("create", False):
-        return StudentQueueView.as_view(teams_user=teams_user)(request)
     else:
         try:
-            # when there is no parameter but user already has a ticket
-            QueueTicket.objects.get(user=teams_user)
-            return StudentQueueView.as_view(teams_user=teams_user)(request)
+            ticket = QueueTicket.objects.get(user=teams_user)
+            return StudentQueueView.as_view(ticket=ticket)(request)
         except QueueTicket.DoesNotExist:
             return StudentNotInQueueView.as_view()(request)
 
@@ -140,11 +162,10 @@ class StudentNotInQueueView(TemplateView):
 class StudentQueueView(DetailView):
     template_name = "que/students.html"
     context_object_name = "student_ticket"
-    teams_user = None
+    ticket = None
 
     def get_object(self, queryset=None):
-        obj, _ = QueueTicket.objects.get_or_create(user=self.teams_user)
-        return obj
+        return self.ticket
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

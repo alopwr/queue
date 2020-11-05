@@ -6,11 +6,14 @@ name = "pypi"
 [packages]
 Django = "*"
 django-heroku = "*"
-gunicorn = "*"
 python-decouple = "*"
 requests-oauthlib = "*"
 jsonfield = "*"
 django-bootstrap4 = "*"
+channels = "*"
+channels-redis = "*"
+gunicorn = "*"
+uvicorn = {extras = ["standard"], version = "*"}
 
 [dev-packages]
 

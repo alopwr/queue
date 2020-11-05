@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load static %}
 {% block title %}
     {% if queue_position == 0 %}
         POŁĄCZENIE!!!
@@ -6,20 +7,19 @@
         {{ queue_position }}. w kolejce
     {% endif %}
 {% endblock %}
-{% block meta %}
-    <meta http-equiv="refresh" content="5;URL='/'">
-{% endblock %}
 {% block content %}
     <div class="container jumbotron">
         {% if queue_position == 0 %}
+            <span style="display: none;" id="zero_in_queue"></span>
             <h1>Twoja kolej!</h1>
             <p class="lead">Odbierz połączenie na Teamsach. Możesz zamknąć to okno. </p>
             <hr class="my-4">
-            <img class="img-fluid" src="https://i.pinimg.com/originals/7b/f8/70/7bf870a9b86ae6c6297b0eb6611a120d.gif" alt="puzon">
+            <img class="img-fluid" src="https://i.pinimg.com/originals/7b/f8/70/7bf870a9b86ae6c6297b0eb6611a120d.gif"
+                 alt="puzon">
         {% else %}
-            <h1>Jesteś <b>{{ queue_position }}.</b> w kolejce.</h1>
+            <h1>Jesteś <b><span class="js-position">{{ queue_position }}</span>.</b> w kolejce.</h1>
             <p class="lead">Szacowany czas oczekiwania na połączenie
-                to <b>{{ estimated_time }}</b> minut.</p>
+                to <b><span class="js-time">{{ estimated_time }}</span></b> minut.</p>
         {% endif %}
         {% if queue_position != 0 %}
             <hr class="my-4">
@@ -27,18 +27,19 @@
                 przebiegła
                 jak najpłynniej.</p>
             <img class="img-fluid" src="https://media0.giphy.com/media/QBd2kLB5qDmysEXre9/giphy.gif" alt="waiting">
-            <p>Dane aktualizowane co 5 sekund.</p>
-            <a href="{% url 'cancel' %}" type="button" class="btn btn-danger">Anuluj prośbę o połączenie
-            </a>
-            <br>
-            <br>
+            <p></p>
+            <a href="{% url 'cancel' %}" type="button" class="btn btn-danger">Anuluj prośbę o połączenie </a>
+            <br/><br/>
             <a href="https://www.youtube.com/watch?v=DLzxrzFCyOs" target="_blank">Muzyka na czekanie</a>
-
         {% endif %}
-        {#        <div class="row"><a class="btn" href="{% url 'login' %}" role="button" style="margin:  40px auto"> <img#}
-        {#                src="{% static 'img/login.svg' %}"#}
-        {#                alt="Login with Microsoft"></a>#}
-        {#        </div>#}
     </div>
 
+{% endblock %}
+{% block javascript %}
+    {{ block.super }}
+    <script>
+        var userId = "{{ request.session.userId }}";
+    </script>
+    <script src="{% static 'js/reconnecting-websocket.min.js' %}"></script>
+    <script src="{% static 'js/student.js' %}"></script>
 {% endblock %}
