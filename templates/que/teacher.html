@@ -1,8 +1,8 @@
 {% extends '_base.html' %}
-{% load deep_links %}
+{% load teacher_view_tags %}
 {% load static %}
 {% block title %}
-Zarządzanie
+    Zarządzanie
 {% endblock %}
 {% block css %}
     <style>
@@ -31,8 +31,8 @@ Zarządzanie
 {% block content %}
     <div class="jumbotron container">
         <h1 class="display-5">Lista błagalników:</h1>
-        <h6>Na audiencję oczekuje jeszcze {{ queue|length }} uczniów. Dane aktualizowane co 5 sekund.</h6>
-        <ul class="list-group">
+        <h6>Na audiencję oczekuje jeszcze <span class="js-length">{{ queue|length }}</span> uczniów.</h6>
+        <ul class="list-group js-list">
             {% for ticket in queue|get3 %}
                 {% if forloop.first %}
                     <li class="list-group-item list-group-item-info d-flex justify-content-between align-items-center">
@@ -52,7 +52,7 @@ Zarządzanie
                 {% endif %}
             {% endfor %}
             {% if queue|length > 4 %}
-                <li class="list-group-item">... i <b>{{ queue|sub3 }}</b> więcej</li>
+                <li class="list-group-item">... i <b><span class="js-length-3">{{ queue|sub3 }}</span></b> więcej</li>
             {% endif %}
         </ul>
         <div class="row">
@@ -99,6 +99,8 @@ Zarządzanie
     <script src="https://kit.fontawesome.com/6cfdb01cc0.js" crossorigin="anonymous"></script>
     <script>
         var startedAt = new Date("{{ startedAt }}");
+        var queue_length = {{ queue|length }};
+        var teacher_principal_name = "{{ object.principal_name }}";
     </script>
     <script src="{% static 'js/timer.js' %}"></script>
     <script src="{% static 'js/reconnecting-websocket.min.js' %}"></script>

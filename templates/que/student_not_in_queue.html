@@ -3,6 +3,14 @@
     Potwierdzenie
 {% endblock %}
 {% block content %}
+    {% if request.GET.cleared %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Sorki!</strong> Pan Walczyński wyczyścił kolejkę.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endif %}
     <div class="container jumbotron">
         <h1>Chcesz stanąć w kolejce?</h1>
         <p class="lead">Zamawianie połączenia na Teamsach od Pana Walczyńskiego</p>

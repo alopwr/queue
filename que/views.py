@@ -61,7 +61,7 @@ def next_view(request):
     now_starting_meeting = QueueTicket.objects.first()
     if now_starting_meeting is not None:
         create_past_meeting(request, now_starting_meeting.user)
-    async_to_sync(channel_layer.group_send)("students", {"type": "queue.next"})
+    async_to_sync(channel_layer.group_send)("students", {"type": "queue.next", "average": average_meeting_time(), })
     return redirect("que")
 
 
@@ -92,18 +92,20 @@ def cancel_view(request):
         "type": "queue.ticket_deleted",
         "position": position,
         "principal_name": principal_name,
+        "average": average_meeting_time(),
     })
     return redirect("que")
 
 
 def create_view(request):
-    obj, created = QueueTicket.objects.get_or_create(user_id=request.session['userId'])
-    if created:
-        async_to_sync(channel_layer.group_send)("teachers", {
-            "type": "queue.ticket_appended",
-            "display_name": obj.user.display_name,
-            "principal_name": obj.user.principal_name,
-        })
+    obj = QueueTicket.objects.create(user_id=request.session['userId'])
+    # if created:
+    async_to_sync(channel_layer.group_send)("teachers", {
+        "type": "queue.ticket_appended",
+        "display_name": obj.user.display_name,
+        "principal_name": obj.user.principal_name,
+        "average": average_meeting_time(),
+    })
     return redirect("que")
 
 
