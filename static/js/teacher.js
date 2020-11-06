@@ -5,6 +5,23 @@ function deep_link(data) {
     return `https://teams.microsoft.com/l/chat/0/0?users=${teacher_principal_name},${data.principal_name},`
 }
 
+refresh_timer = null;
+
+function setTimer() {
+    if (refresh_timer == null)
+        refresh_timer = setTimeout(function () {
+            window.location.reload();
+        }, 10000);
+}
+
+socket.onclose = setTimer;
+socket.onerror = setTimer;
+socket.onopen = function (e) {
+    if (refresh_timer) {
+        clearTimeout(refresh_timer);
+        refresh_timer = null;
+    }
+};
 socket.onmessage = function (message) {
     var data = JSON.parse(message.data);
     switch (data['msg_type']) {

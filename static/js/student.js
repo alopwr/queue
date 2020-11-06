@@ -1,11 +1,28 @@
 ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
 socket = new ReconnectingWebSocket(ws_scheme + '://' + window.location.host + "/ws/students/" + userId);
+
+refresh_timer = null;
+
+function setTimer() {
+    if (refresh_timer == null)
+        refresh_timer = setTimeout(function () {
+            window.location.reload();
+        }, 10000);
+}
+
+socket.onclose = setTimer;
+socket.onerror = setTimer;
+
 socket.onopen = function (e) {
+    if (refresh_timer) {
+        clearTimeout(refresh_timer);
+        refresh_timer = null;
+    }
     socket.send(JSON.stringify({"type": "get.update"}));
 };
+
 socket.onmessage = function (message) {
     data = JSON.parse(message.data);
-    console.log(data);
     switch (data['msg_type']) {
         case 'queue.updated':
             if (data['position'] < 0) {
