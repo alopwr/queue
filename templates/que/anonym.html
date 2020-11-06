@@ -1,7 +1,7 @@
 {% extends '_base.html' %}
 {% load static %}
 {% block title %}
-Dołącz
+    Dołącz
 {% endblock %}
 {% block css %}
     <style>
@@ -13,6 +13,13 @@ Dołącz
             background-repeat: no-repeat;
             background-image: url({% static 'img/login.svg' %});
             background-size: contain;
+            margin-top: 4%;
+            margin-bottom: 0;
+        }
+        @media only screen and (min-width: 992px) {
+            .login {
+                margin-top: -1%;
+            }
         }
     </style>
 {% endblock %}
@@ -21,18 +28,17 @@ Dołącz
         <h1>System zarządzania audiencją u Pana Walczyńskiego</h1>
         <p class="lead">Zautomatyzowane obsługiwanie błagalników</p>
         <hr class="my-4">
-        <p>Aktualnie kolejka liczy <b>{{ queue_length }}</b> oczekujących. Szacowany czas oczekiwania na połączenie to <b>{{ estimated_time }} minut.</b></p>
+        <p>Aktualnie kolejka liczy <b>{{ queue_length }}</b> oczekujących. Szacowany czas oczekiwania na połączenie to
+            <b>{{ estimated_time }} minut.</b></p>
         <br>
-        <img class="img-fluid"  src="https://media1.giphy.com/media/5YuhLwDgrgtRVwI7OY/200.gif" alt="pingwiny">
-                        <br>
+        <img class="img-fluid" src="https://media1.giphy.com/media/5YuhLwDgrgtRVwI7OY/200.gif" alt="pingwiny">
         <br>
-        <p>Aby zamówić rozmowę (stanąć w kolejce), zaloguj się kontem Microsoft Teams:
-        <a href="{% url 'login' %}" role="button" class="btn login" style="margin: 0 5%; transform: translate(-5%, 0);">
-            Login with Microsoft
-        </a></p>
-        {#        <div class="row"><a class="btn" href="{% url 'login' %}" role="button" style="margin:  40px auto"> <img#}
-        {#                src="{% static 'img/login.svg' %}"#}
-        {#                alt="Login with Microsoft"></a>#}
-        {#        </div>#}
+        <br>
+        <div class="d-flex align-content-center flex-wrap justify-content-between">Aby zamówić rozmowę (stanąć w kolejce),
+            zaloguj się kontem Microsoft Teams:
+            <a href="{% url 'login' %}" role="button" class="btn login">
+                Login with Microsoft
+            </a><span></span>
+        </div>
     </div>
 {% endblock %}

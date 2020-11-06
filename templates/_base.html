@@ -44,11 +44,11 @@
         <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
             <div class="container">
                 <a class="navbar-brand" href="/">👪👪👪 Kolejka</a>
-                <button class="navbar-toggler navbar-toggler-left" type="button" data-toggle="collapse"
-                        data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="text-light">☰</span>
-                </button>
+{#                <button class="navbar-toggler navbar-toggler-left" type="button" data-toggle="collapse"#}
+{#                        data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"#}
+{#                        aria-label="Toggle navigation">#}
+{#                    <span class="text-light">☰</span>#}
+{#                </button>#}
                 {#            <div class="collapse navbar-collapse" id="navbarResponsive">#}
                 {#                <ul class="navbar-nav ml-auto">#}
                 {#                    {% last_repo_cookie as last_repo_cookie %}#}
@@ -97,10 +97,8 @@
 {% block javascript %}
     <!-- Bootstrap JavaScript -->
     {% bootstrap_javascript jquery='full' %}
-
     <!-- Project JS -->
     <script src="{% static 'js/base.js' %}"></script>
-
 {% endblock javascript %}
 
 </body>
