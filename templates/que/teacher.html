@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load teams_tab_tags %}
 {% load teacher_view_tags %}
 {% load static %}
 {% block title %}
@@ -38,7 +39,8 @@
                     <li class="list-group-item list-group-item-info d-flex justify-content-between align-items-center">
                         <i class="far fa-hand-point-right fa-lg flying-bullet"></i>
                         <span>
-                            <a href="callto:{{ ticket.user.principal_name }}">{{ ticket.user.display_name }}</a>
+                            <a href="callto:{{ ticket.user.principal_name }}" {% if request|is_teams %}
+                               target="_blank"{% endif %}>{{ ticket.user.display_name }}</a>
                             <span id="timer"></span>
                         </span>
                         <a href="{% chat_deep_link object ticket.user %}"
