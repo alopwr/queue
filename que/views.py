@@ -52,13 +52,9 @@ def callback(request):
 def next_view(request):
     finished_ticket = QueueTicket.objects.first()
     if finished_ticket is not None:
-        finished_meeting = PastMeeting.objects.update(
-            teacher=AuthorizedTeamsUser.objects.get(
-                principal_name=request.session["userPrincipalName"]
-            ),
-            student=finished_ticket.user,
-            finished_at=timezone.now(),
-        )
+        PastMeeting.objects.filter(finished_at__isnull=True,
+                                   teacher__principal_name=request.session["userPrincipalName"],
+                                   student=finished_ticket.user).update(finished_at=timezone.now())
         finished_ticket.delete()
     now_starting_meeting = QueueTicket.objects.first()
     if now_starting_meeting is not None:
