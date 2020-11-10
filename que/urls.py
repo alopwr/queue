@@ -1,13 +1,13 @@
 from django.shortcuts import redirect
-from django.urls import path
+from django.urls import path, include
 
 from . import views
 
 
 def login_as_cieplucha(request):
     """only for testing purposes"""
-    request.session['userId'] = 1
-    request.session['userPrincipalName'] = "g@g.pl"
+    request.session["userId"] = 1
+    request.session["userPrincipalName"] = "g@g.pl"
     return redirect("que")
 
 
@@ -20,6 +20,7 @@ urlpatterns = [
     path("login", views.sign_in, name="login"),
     path("logout", views.logout, name="logout"),
     path("callback", views.callback, name="callback"),
-    path("ticket/create", views.create_view, name='create'),
+    path("ticket/create", views.create_view, name="create"),
     path("cieplucha", login_as_cieplucha),
+    path("webpush/", include("webpush.urls")),
 ]

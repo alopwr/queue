@@ -3,7 +3,7 @@ from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 
 class TeacherConsumer(AsyncJsonWebsocketConsumer):
-    groups = ['teachers', "queue_listeners"]
+    groups = ["teachers", "queue_listeners"]
 
     async def queue_ticket_appended(self, event):
         await self.send_json(
@@ -15,22 +15,23 @@ class TeacherConsumer(AsyncJsonWebsocketConsumer):
         )
 
     async def queue_ticket_deleted(self, event):
-        await self.send_json({"msg_type": "queue.ticket_deleted"}, )
+        await self.send_json({"msg_type": "queue.ticket_deleted"},)
 
 
 class StudentConsumer(AsyncJsonWebsocketConsumer):
-    groups = ['students', "queue_listeners"]
+    groups = ["students", "queue_listeners"]
     position = None
     average_meeting_time = None
     userId = None
 
     async def connect(self):
-        self.userId = self.scope['url_route']['kwargs']['id']
+        self.userId = self.scope["url_route"]["kwargs"]["id"]
         await self.accept()
 
     @database_sync_to_async
     def load_status(self):
         from ..models import QueueTicket, average_meeting_time
+
         ticket = QueueTicket.objects.get(user_id=self.userId)
         self.position = ticket.position_in_queue
         self.average_meeting_time = average_meeting_time()
@@ -38,15 +39,15 @@ class StudentConsumer(AsyncJsonWebsocketConsumer):
     async def queue_ticket_deleted(self, event):
         if event["position"] < self.position:
             self.position -= 1
-            self.average_meeting_time = event['average']
+            self.average_meeting_time = event["average"]
             await self.send_update()
 
     async def queue_cleared(self, _):
-        await self.send_json({"msg_type": "queue.cleared", }, )
+        await self.send_json({"msg_type": "queue.cleared",},)
 
     async def queue_next(self, event):
         self.position -= 1
-        self.average_meeting_time = event['average']
+        self.average_meeting_time = event["average"]
         await self.send_update()
 
     async def send_update(self):
@@ -59,6 +60,6 @@ class StudentConsumer(AsyncJsonWebsocketConsumer):
         )
 
     async def receive_json(self, content, **kwargs):
-        if content['type'] == "get.update":
+        if content["type"] == "get.update":
             await self.load_status()
             await self.send_update()

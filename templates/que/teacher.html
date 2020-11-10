@@ -2,8 +2,13 @@
 {% load teams_tab_tags %}
 {% load teacher_view_tags %}
 {% load static %}
+{% load webpush_notifications %}
+
 {% block title %}
     Zarządzanie
+{% endblock %}
+{% block meta %}
+    {% webpush_header %}
 {% endblock %}
 {% block css %}
     <style>
@@ -30,6 +35,7 @@
     </style>
 {% endblock %}
 {% block content %}
+    {% webpush_button with_class="btn btn-outline-info" %}
     <div class="jumbotron container">
         <h1 class="display-5">Lista błagalników:</h1>
         <h6>Na audiencję oczekuje jeszcze <span class="js-length">{{ queue|length }}</span> uczniów.</h6>

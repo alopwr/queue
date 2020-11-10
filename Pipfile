@@ -13,9 +13,13 @@ django-bootstrap4 = "*"
 channels = "*"
 channels-redis = "*"
 gunicorn = "*"
-uvicorn = {extras = ["standard"], version = "*"}
+django-webpush = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.8"
+
+[packages.uvicorn]
+extras = [ "standard",]
+version = "*"

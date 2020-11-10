@@ -8,6 +8,7 @@ from django.views.generic import TemplateView, ListView, DetailView
 from que.decorators import is_teacher_required
 from .auth_helper import get_sign_in_url, get_token_from_code, get_user
 from .models import AuthorizedTeamsUser, QueueTicket, PastMeeting, average_meeting_time
+from webpush import send_group_notification
 
 channel_layer = get_channel_layer()
 
@@ -33,7 +34,12 @@ def callback(request):
     # Get the user's profile
     user = get_user(token)
     if user["userPrincipalName"] == "gaspar.sekula.2019@zsa.pwr.edu.pl":
-        user['displayName'] += " 🤓"
+        user["displayName"] += " 🤓🤓🤓"
+    elif (
+        user[""] == "maksymilian.skica.2019@zsa.pwr.edu.pl"
+        or user[""] == "szymon.kowalinski.2019@zsa.pwr.edu.pl"
+    ):
+        user["displayName"] += " 🚣🚣🚣"
     AuthorizedTeamsUser.objects.update_or_create(
         id=user["id"],
         defaults={
@@ -52,14 +58,18 @@ def callback(request):
 def next_view(request):
     finished_ticket = QueueTicket.objects.first()
     if finished_ticket is not None:
-        PastMeeting.objects.filter(finished_at__isnull=True,
-                                   teacher__principal_name=request.session["userPrincipalName"],
-                                   student=finished_ticket.user).update(finished_at=timezone.now())
+        PastMeeting.objects.filter(
+            finished_at__isnull=True,
+            teacher__principal_name=request.session["userPrincipalName"],
+            student=finished_ticket.user,
+        ).update(finished_at=timezone.now())
         finished_ticket.delete()
     now_starting_meeting = QueueTicket.objects.first()
     if now_starting_meeting is not None:
         create_past_meeting(request, now_starting_meeting.user)
-    async_to_sync(channel_layer.group_send)("students", {"type": "queue.next", "average": average_meeting_time(), })
+    async_to_sync(channel_layer.group_send)(
+        "students", {"type": "queue.next", "average": average_meeting_time(),}
+    )
     return redirect("que")
 
 
@@ -77,33 +87,41 @@ def create_past_meeting(request, student):
 def clear_view(request):
     QueueTicket.objects.all().delete()
     PastMeeting.objects.filter(finished_at__isnull=True).delete()
-    async_to_sync(channel_layer.group_send)("students", {"type": "queue.cleared", })
+    async_to_sync(channel_layer.group_send)("students", {"type": "queue.cleared",})
     return redirect("que")
 
 
 def cancel_view(request):
-    ticket = QueueTicket.objects.get(user__principal_name=request.session.get("userPrincipalName"))
+    ticket = QueueTicket.objects.get(
+        user__principal_name=request.session.get("userPrincipalName")
+    )
     principal_name = ticket.user.principal_name
     position = ticket.position_in_queue
     ticket.delete()
-    async_to_sync(channel_layer.group_send)("queue_listeners", {
-        "type": "queue.ticket_deleted",
-        "position": position,
-        "principal_name": principal_name,
-        "average": average_meeting_time(),
-    })
+    async_to_sync(channel_layer.group_send)(
+        "queue_listeners",
+        {
+            "type": "queue.ticket_deleted",
+            "position": position,
+            "principal_name": principal_name,
+            "average": average_meeting_time(),
+        },
+    )
     return redirect("que")
 
 
 def create_view(request):
-    obj, created = QueueTicket.objects.get_or_create(user_id=request.session['userId'])
+    obj, created = QueueTicket.objects.get_or_create(user_id=request.session["userId"])
     if created:
-        async_to_sync(channel_layer.group_send)("teachers", {
-            "type": "queue.ticket_appended",
-            "display_name": obj.user.display_name,
-            "principal_name": obj.user.principal_name,
-            "average": average_meeting_time(),
-        })
+        async_to_sync(channel_layer.group_send)(
+            "teachers",
+            {
+                "type": "queue.ticket_appended",
+                "display_name": obj.user.display_name,
+                "principal_name": obj.user.principal_name,
+                "average": average_meeting_time(),
+            },
+        )
     return redirect("que")
 
 
@@ -144,8 +162,10 @@ class TeacherQueueView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context["object"] = self.teams_user
+        webpush = {"group": self.teams_user.principal_name}
+        context["webpush"] = webpush
         if (
-                len(context["queue"]) > 0
+            len(context["queue"]) > 0
         ):  # creating a meeting for the 1st person in the queue
             context["startedAt"] = create_past_meeting(
                 self.request, QueueTicket.objects.first().user
@@ -168,7 +188,37 @@ class StudentQueueView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["queue_position"] = context["student_ticket"].position_in_queue
+        if context["queue_position"] == 0:
+            try:
+                payload = {
+                    "head": "Twoja kolej!",
+                    "body": "Za moment pan Walczyński zadzwoni na Teamsach.",
+                    "icon": "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/black-telephone_260e.png",
+                }
+                send_group_notification(
+                    group_name=context["student_ticket"].user.principal_name,
+                    payload=payload,
+                    ttl=1000,
+                )
+            except:
+                pass
+            if QueueTicket.objects.count() == 1:
+                try:
+                    payload = {
+                        "head": "Nowy oczekujący",
+                        "body": "{} prosi o połączenie.".format(
+                            context["student_ticket"].user.display_name
+                        ),
+                        "icon": "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/black-telephone_260e.png",
+                    }
+                    send_group_notification(
+                        group_name=context["student_ticket"].user.principal_name,
+                        payload=payload,
+                        ttl=1000,
+                    )
+                except:
+                    pass
         context["estimated_time"] = (
-                context["student_ticket"].position_in_queue * average_meeting_time()
+            context["student_ticket"].position_in_queue * average_meeting_time()
         )
         return context

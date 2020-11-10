@@ -17,11 +17,9 @@ import que.websockets.routing
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "queueapp.settings")
 
-application = ProtocolTypeRouter({
-    "http": get_asgi_application(),
-    "websocket": SessionMiddlewareStack(
-        URLRouter(
-            que.websockets.routing.urls,
-        )
-    ),
-})
+application = ProtocolTypeRouter(
+    {
+        "http": get_asgi_application(),
+        "websocket": SessionMiddlewareStack(URLRouter(que.websockets.routing.urls,)),
+    }
+)

@@ -37,7 +37,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'channels',
+    "channels",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -45,9 +45,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "bootstrap4",
+    "webpush",
     "que.apps.QueConfig",
 ]
-
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -95,9 +95,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator", },
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator", },
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator", },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
 ]
 
 # Internationalization
@@ -124,21 +124,24 @@ MS_TEAMS_APP_ID = "6b5b2ac1-4d64-4f78-a0a7-c12b223cba2f"
 MS_TEAMS_TENANT_ID = "327aa26f-46bc-41f9-aaef-74b5ceff014b"
 MS_TEAMS_APP_SECRET = config("MS_TEAMS_APP_SECRET")
 
-ASGI_APPLICATION = 'queueapp.asgi.application'
+ASGI_APPLICATION = "queueapp.asgi.application"
 if config("LOCAL", default=False, cast=bool):
     CHANNEL_LAYERS = {
-        'default': {
-            'BACKEND': 'channels.layers.InMemoryChannelLayer',
-        },
+        "default": {"BACKEND": "channels.layers.InMemoryChannelLayer",},
     }
 else:
     CHANNEL_LAYERS = {
-        'default': {
-            'BACKEND': 'channels_redis.core.RedisChannelLayer',
-            'CONFIG': {
-                "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [os.environ.get("REDIS_URL", "redis://localhost:6379")],
             },
         },
     }
+WEBPUSH_SETTINGS = {
+    "VAPID_PUBLIC_KEY": config("VAPID_PUBLIC_KEY"),
+    "VAPID_PRIVATE_KEY": config("VAPID_PRIVATE_KEY"),
+    "VAPID_ADMIN_EMAIL": config("VAPID_ADMIN_EMAIL"),
+}
 
 django_heroku.settings(locals())
