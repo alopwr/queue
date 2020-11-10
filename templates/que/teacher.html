@@ -35,7 +35,6 @@
     </style>
 {% endblock %}
 {% block content %}
-    {% webpush_button with_class="btn btn-outline-info" %}
     <div class="jumbotron container">
         <h1 class="display-5">Lista błagalników:</h1>
         <h6>Na audiencję oczekuje jeszcze <span class="js-length">{{ queue|length }}</span> uczniów.</h6>
@@ -75,6 +74,7 @@
                 Koniec rozmowy (następny uczeń)
             </a>
         </div>
+    {% webpush_button with_class="btn btn-outline-info" %}
 
 
         <!-- Modal -->
