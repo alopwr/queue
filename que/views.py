@@ -212,7 +212,7 @@ class StudentQueueView(DetailView):
                         "icon": "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/black-telephone_260e.png",
                     }
                     send_group_notification(
-                        group_name=context["student_ticket"].user.principal_name,
+                        group_name="maciej.walczynski@zsa.pwr.edu.pl",
                         payload=payload,
                         ttl=1000,
                     )
