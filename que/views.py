@@ -34,12 +34,7 @@ def callback(request):
     # Get the user's profile
     user = get_user(token)
     if user["userPrincipalName"] == "gaspar.sekula.2019@zsa.pwr.edu.pl":
-        user["displayName"] += " 🤓🤓🤓"
-    elif (
-        user[""] == "maksymilian.skica.2019@zsa.pwr.edu.pl"
-        or user[""] == "szymon.kowalinski.2019@zsa.pwr.edu.pl"
-    ):
-        user["displayName"] += " 🚣🚣🚣"
+        user["displayName"] += " 🤓🤓"
     AuthorizedTeamsUser.objects.update_or_create(
         id=user["id"],
         defaults={
