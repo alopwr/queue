@@ -171,6 +171,11 @@ class TeacherQueueView(ListView):
 class StudentNotInQueueView(TemplateView):
     template_name = "que/student_not_in_queue.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["estimated_time"] = context["queue_length"] * average_meeting_time()
+        return context
+
 
 class StudentQueueView(DetailView):
     template_name = "que/students.html"
