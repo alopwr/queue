@@ -79,4 +79,4 @@ def average_meeting_time():
     if len(durations) <= 0:
         return 6
     average_duration = sum(durations) / len(durations) / 60
-    return min(max(average_duration, 2), 6)
+    return min(max(average_duration, 2), 25)
