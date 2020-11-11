@@ -173,6 +173,7 @@ class StudentNotInQueueView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["queue_length"] = max(QueueTicket.objects.count(), 0)
         context["estimated_time"] = context["queue_length"] * average_meeting_time() + 1
         return context
 
