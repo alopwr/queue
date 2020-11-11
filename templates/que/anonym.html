@@ -29,7 +29,7 @@
         <p class="lead">Zautomatyzowane obsługiwanie błagalników</p>
         <hr class="my-4">
         <p>Aktualnie kolejka liczy <b>{{ queue_length }}</b> oczekujących. Szacowany czas oczekiwania na połączenie to
-            <b>{{ estimated_time }} minut.</b></p>
+            <b>{{ estimated_time|floatformat }} minut.</b></p>
         <br>
         <img class="img-fluid" src="https://media1.giphy.com/media/5YuhLwDgrgtRVwI7OY/200.gif" alt="pingwiny">
         <br>

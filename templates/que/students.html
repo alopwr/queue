@@ -24,7 +24,7 @@
         {% else %}
             <h1>Jesteś <b><span class="js-position">{{ queue_position }}</span>.</b> w kolejce.</h1>
             <p class="lead">Szacowany czas oczekiwania na połączenie
-                to <b><span class="js-time">{{ estimated_time }}</span></b> minut.</p>
+                to <b><span class="js-time">{{ estimated_time|floatformat }}</span></b> minut.</p>
         {% endif %}
         {% if queue_position != 0 %}
             <hr class="my-4">
