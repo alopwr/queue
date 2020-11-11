@@ -25,7 +25,7 @@ class AuthorizedTeamsUser(models.Model):
             return False
 
     def __str__(self):
-        return self.principal_name
+        return self.display_name
 
 
 class QueueTicket(models.Model):
@@ -62,6 +62,11 @@ class PastMeeting(models.Model):
         if not self.finished_at:
             return None
         return self.finished_at - self.started_at
+
+    def __str__(self):
+        return "Meeting with {} for {:.2f} minutes".format(
+            self.student.display_name, self.duration.seconds / 60
+        )
 
 
 def average_meeting_time():
