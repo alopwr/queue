@@ -183,6 +183,8 @@ class StudentQueueView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["queue_position"] = context["student_ticket"].position_in_queue
+        webpush = {"group": context["student_ticket"].user.principal_name}
+        context["webpush"] = webpush
         if context["queue_position"] == 0:
             try:
                 payload = {
