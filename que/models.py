@@ -64,9 +64,12 @@ class PastMeeting(models.Model):
         return self.finished_at - self.started_at
 
     def __str__(self):
-        return "Meeting with {} for {:.2f} minutes".format(
-            self.student.display_name, self.duration.seconds / 60
-        )
+        try:
+            return "Meeting with {} for {:.2f} minutes".format(
+                self.student.display_name, self.duration.seconds / 60
+            )
+        except:
+            return "Not finished meeting with {}".format(self.student.display_name)
 
 
 def average_meeting_time():
