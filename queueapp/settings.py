@@ -29,7 +29,6 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", cast=bool, default=False)
 
 ALLOWED_HOSTS = [
-    "aloqueue.herokuapp.com",
     "queue.skica.dev",
     "queue.kowalinski.dev",
 ]
@@ -116,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Warsaw"
 
 USE_I18N = True
 
@@ -131,12 +130,13 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 MS_TEAMS_SCOPES = "openid profile offline_access user.read"
-MS_TEAMS_APP_ID = "6b5b2ac1-4d64-4f78-a0a7-c12b223cba2f"
+MS_TEAMS_APP_ID = "42d5d8c5-5e61-4af8-a9e5-0c6e84b4a875"
 MS_TEAMS_TENANT_ID = "327aa26f-46bc-41f9-aaef-74b5ceff014b"
-MS_TEAMS_APP_SECRET = config("MS_TEAMS_APP_SECRET")
+
+MS_TEAMS_APP_SECRET = "CIvIXr-ZvI2zOVMg~~~PQZg86c-issXb65"
 
 ASGI_APPLICATION = "queueapp.asgi.application"
-if config("LOCAL", default=False, cast=bool):
+if DEBUG:
     CHANNEL_LAYERS = {
         "default": {"BACKEND": "channels.layers.InMemoryChannelLayer",},
     }
@@ -154,5 +154,6 @@ WEBPUSH_SETTINGS = {
     "VAPID_PRIVATE_KEY": config("VAPID_PRIVATE_KEY"),
     "VAPID_ADMIN_EMAIL": config("VAPID_ADMIN_EMAIL"),
 }
-
-django_heroku.settings(locals())
+# s3 i sqs full access
+AWS_ID = "AKIAUXZDKYJMPHFCN6XF"
+AWS_SECRET = "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"
