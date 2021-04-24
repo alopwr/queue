@@ -133,7 +133,7 @@ MS_TEAMS_SCOPES = "openid profile offline_access user.read"
 MS_TEAMS_APP_ID = "42d5d8c5-5e61-4af8-a9e5-0c6e84b4a875"
 MS_TEAMS_TENANT_ID = "327aa26f-46bc-41f9-aaef-74b5ceff014b"
 
-MS_TEAMS_APP_SECRET = "CIvIXr-ZvI2zOVMg~~~PQZg86c-issXb65"
+MS_TEAMS_APP_SECRET = config("MS_TEAMS_APP_SECRET")
 
 ASGI_APPLICATION = "queueapp.asgi.application"
 if DEBUG:
@@ -145,7 +145,8 @@ else:
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
             "CONFIG": {
-                "hosts": [os.environ.get("REDIS_URL", "redis://localhost:6379")],
+                "hosts": [config("CR_REDIS_HOST", "redis://localhost:6379")],
+                "password": config("CR_REDIS_PASSWORD"),
             },
         },
     }
