@@ -14,6 +14,8 @@ channels-redis = "*"
 gunicorn = "*"
 django-webpush = "*"
 sentry-sdk = "*"
+boto3 = "*"
+django-storages = "*"
 
 [dev-packages]
 
