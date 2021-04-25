@@ -7,6 +7,6 @@ register = template.Library()
 @register.filter()
 def is_teams(request):
     try:
-        return "teams" in request.META["HTTP_USER_AGENT"].lower()
+        return "teams" in request.META.get("HTTP_USER_AGENT").lower()
     except AttributeError:
         return False
