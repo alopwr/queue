@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os.path
 from pathlib import Path
 
-import django_heroku
 from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
