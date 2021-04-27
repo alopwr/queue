@@ -17,6 +17,7 @@ sentry-sdk = "*"
 boto3 = "*"
 django-storages = "*"
 psycopg2-binary = "*"
+twisted = "<21"
 
 [dev-packages]
 
