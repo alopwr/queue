@@ -15,6 +15,7 @@ channels-redis = "*"
 gunicorn = "*"
 django-webpush = "*"
 sentry-sdk = "*"
+twisted = "<21"
 
 [dev-packages]
 
