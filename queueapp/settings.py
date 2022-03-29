@@ -113,7 +113,6 @@ AWS_DEFAULT_ACL = "public-read"
 AWS_S3_OBJECT_PARAMETERS = {
     "CacheControl": "max-age=86400",
 }
-
 MS_TEAMS_SCOPES = "openid profile offline_access user.read"
 MS_TEAMS_APP_ID = config("MS_TEAMS_APP_ID")
 MS_TEAMS_TENANT_ID = config("MS_TEAMS_TENANT_ID")
