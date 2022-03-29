@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os.path
 from pathlib import Path
 
-import django_heroku
 from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,23 +27,6 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", cast=bool, default=False)
 
-ALLOWED_HOSTS = [
-    "aloqueue.herokuapp.com",
-    "queue.skica.dev",
-    "queue.kowalinski.dev",
-]
-if not DEBUG and config("SENTRY_DSN"):
-    import sentry_sdk
-    from sentry_sdk.integrations.django import DjangoIntegration
-
-    sentry_sdk.init(
-        dsn=config("SENTRY_DSN"),
-        integrations=[DjangoIntegration()],
-        traces_sample_rate=1.0,
-        # If you wish to associate users to errors (assuming you are using
-        # django.contrib.auth) you may enable sending PII data.
-        send_default_pii=True,
-    )
 # Application definition
 
 INSTALLED_APPS = [
@@ -88,16 +70,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "queueapp.wsgi.application"
-
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -116,7 +89,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Warsaw"
 
 USE_I18N = True
 
@@ -129,30 +102,32 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
+AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = "queue-static"
+AWS_S3_REGION_NAME = "eu-central-1"
+AWS_LOCATION = "static"
+AWS_DEFAULT_ACL = "public-read"
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": "max-age=86400",
+}
 MS_TEAMS_SCOPES = "openid profile offline_access user.read"
-MS_TEAMS_APP_ID = "6b5b2ac1-4d64-4f78-a0a7-c12b223cba2f"
-MS_TEAMS_TENANT_ID = "327aa26f-46bc-41f9-aaef-74b5ceff014b"
+MS_TEAMS_APP_ID = config("MS_TEAMS_APP_ID")
+MS_TEAMS_TENANT_ID = config("MS_TEAMS_TENANT_ID")
+
 MS_TEAMS_APP_SECRET = config("MS_TEAMS_APP_SECRET")
 
 ASGI_APPLICATION = "queueapp.asgi.application"
-if config("LOCAL", default=False, cast=bool):
-    CHANNEL_LAYERS = {
-        "default": {"BACKEND": "channels.layers.InMemoryChannelLayer",},
-    }
-else:
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "channels_redis.core.RedisChannelLayer",
-            "CONFIG": {
-                "hosts": [os.environ.get("REDIS_URL", "redis://localhost:6379")],
-            },
-        },
-    }
+
 WEBPUSH_SETTINGS = {
     "VAPID_PUBLIC_KEY": config("VAPID_PUBLIC_KEY"),
     "VAPID_PRIVATE_KEY": config("VAPID_PRIVATE_KEY"),
     "VAPID_ADMIN_EMAIL": config("VAPID_ADMIN_EMAIL"),
 }
 
-django_heroku.settings(locals())
+if config("CAPROVER", default=False):
+    from .settings_caprover import *
+else:
+    from .settings_dev import *
